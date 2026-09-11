@@ -14,5 +14,5 @@ This will, in fact, be my first raylib project.
 
 ## Author
 
-&copy; 2026 Saptaparno Chakraborty.  
+&copy; 2026 [Saptaparno Chakraborty](https://github.com/schak04).  
 All Rights Reserved.
