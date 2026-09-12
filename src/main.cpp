@@ -1,7 +1,19 @@
-#include <iostream>
+#include <raylib.h>
 
 int main() {
-  std::cout << "Entrypoint of SpaceSept Pow!\n";
+    InitWindow(1280, 720, "SpaceSept Pow!");
+    SetTargetFPS(60);
 
-  return 0;
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+        DrawText("SpaceSept Pow!", 32, 32, 32, RAYWHITE);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+
+    return 0;
 }
