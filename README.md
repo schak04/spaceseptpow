@@ -95,6 +95,7 @@ Sound effects, starfield background, simple boss, ranged-attacking enemy, persis
 - https://www.raylib.com/cheatsheet/cheatsheet.html
 - https://www.raylib.com/examples/core/loader.html?name=core_basic_window
 - https://www.raylib.com/examples/core/loader.html?name=core_delta_time
+- https://www.gafferongames.com/post/spring_physics
 
 ---
 
