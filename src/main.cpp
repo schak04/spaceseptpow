@@ -15,6 +15,8 @@ int main() {
     const float speed = 200.0f;
 
     while (!WindowShouldClose()) {
+        circPos.x += GetFrameTime() * speed;
+
         BeginDrawing();
 
         ClearBackground(BLACK);
@@ -22,8 +24,6 @@ int main() {
                  (float)SCREEN_WIDTH * (1.0f / 40.0f), 32, RAYWHITE);
         DrawText(std::to_string(GetFPS()).c_str(), (float)SCREEN_HEIGHT * (1.0f / 80.0f),
                  (float)SCREEN_WIDTH * (2.0f / 40.0f), 32, GREEN);
-
-        circPos.x += GetFrameTime() * speed;
 
         DrawCircleV(circPos, circRad, BLUE);
 
