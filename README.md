@@ -71,15 +71,15 @@ No pathfinding, no ranged attacks in v1.
 - Inertia is the signature mechanic, so acceleration and drag are to be tuned first.
 - Enemies inflict contact damage only in v1. Enemy projectiles are a stretch goal.
 - One fixed arena, no scrolling, no camera work.
+- Firing direction will be fixed up and straight, so firing depends only on player positioning (no rotation).
 
 ## Decisions yet to be made
 
 I'll decide while coding and playtesting:
 
-- Firing direction (fixed up, or the way the ship faces)
-- Arena edge behaviour (whether to use clamping or wrapping)
-- Starting energy, pickup amount, drop chance
-- Wave scaling values and constraints
+- [x] Arena edge behaviour (whether to use clamping or wrapping) -> Decision: Clamping
+- [ ] Starting energy, pickup amount, drop chance
+- [ ] Wave scaling values and constraints
 
 ---
 
