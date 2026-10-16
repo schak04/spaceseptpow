@@ -48,7 +48,7 @@ void movePlayer() {
     // v(t) = v0 * e^(-kt) -> Exponential Decay
     // e^(-kt) is always positive for finite values of k and t
     if (player.acceleration.x == 0.0f && player.acceleration.y == 0) {
-        const int drag = 6;
+        const int drag = 2;
         const float damping = std::exp(-drag * dt);
         player.velocity.x *= damping;
         player.velocity.y *= damping;
