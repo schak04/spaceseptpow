@@ -1,7 +1,6 @@
 # SpaceSept Pow!
 
-This project is a 2D top-down space shooter game that I'm about to start writing in C++ using raylib.
-This will, in fact, be my first raylib project.
+This project is a 2D top-down space shooter game that I'm writing in C++ using raylib. This is, in fact, my first raylib project.
 
 - **Tech:** C++ and raylib
 - **Platform:** Linux native first, macOS/Windows later. Steam deck support intended once the initial version is complete.
