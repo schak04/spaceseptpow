@@ -16,17 +16,27 @@ struct Player {
 Player player;
 
 // input -> acceleration -> velocity -> position
-// TODO: normalize diagonal movement later
 void movePlayer() {
     const float dt = GetFrameTime();
     const float inputInducedAcc = 600.0f;
 
+    Vector2 input = {0.0f, 0.0f};
+
+    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) input.y -= 1.0f;
+    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) input.y += 1.0f;
+    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.x -= 1.0f;
+    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.x += 1.0f;
+
+    // normalize input (if its magnitude is non-zero)
+    // NOTE: magnitude of a vector, |v| = (x^2 + y^2)^(0.5)
+    float inputMagnitude = std::sqrt(input.x * input.x + input.y * input.y);
+
     player.acceleration = {0.0f, 0.0f};
 
-    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) player.acceleration.y -= inputInducedAcc;
-    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) player.acceleration.y += inputInducedAcc;
-    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) player.acceleration.x -= inputInducedAcc;
-    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) player.acceleration.x += inputInducedAcc;
+    if (inputMagnitude > 0.0f) {
+        player.acceleration.x = (input.x / inputMagnitude) * inputInducedAcc;
+        player.acceleration.y = (input.y / inputMagnitude) * inputInducedAcc;
+    }
 
     player.velocity.x += player.acceleration.x * dt;
     player.velocity.y += player.acceleration.y * dt;
