@@ -1,5 +1,7 @@
 #include <raylib.h>
 
+#include <cmath>
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 #define GAME_NAME "SpaceSept Pow!"
@@ -14,27 +16,33 @@ struct Player {
 Player player;
 
 // input -> acceleration -> velocity -> position
+// TODO: normalize diagonal movement later
 void movePlayer() {
     const float dt = GetFrameTime();
-    const float inputInducedAcc = 200.0f;
+    const float inputInducedAcc = 600.0f;
 
     player.acceleration = {0.0f, 0.0f};
 
-    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) {
-        player.acceleration.y -= inputInducedAcc;
-    }
-    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) {
-        player.acceleration.y += inputInducedAcc;
-    }
-    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
-        player.acceleration.x -= inputInducedAcc;
-    }
-    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
-        player.acceleration.x += inputInducedAcc;
-    }
+    if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP)) player.acceleration.y -= inputInducedAcc;
+    if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN)) player.acceleration.y += inputInducedAcc;
+    if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) player.acceleration.x -= inputInducedAcc;
+    if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) player.acceleration.x += inputInducedAcc;
 
     player.velocity.x += player.acceleration.x * dt;
     player.velocity.y += player.acceleration.y * dt;
+
+    // NOTE: DRAG AND EXPONENTIAL DAMPING
+    // Drag acceleration is proportional to velocity and opposite
+    // in direction, so the faster it moves the faster it slows down.
+    // dv/dt = -kv (k is the drag coeffcient or damping rate)
+    // v(t) = v0 * e^(-kt) -> Exponential Decay
+    // e^(-kt) is always positive for finite values of k and t
+    if (player.acceleration.x == 0.0f && player.acceleration.y == 0) {
+        const int drag = 6;
+        const float damping = std::exp(-drag * dt);
+        player.velocity.x *= damping;
+        player.velocity.y *= damping;
+    }
 
     player.pos.x += player.velocity.x * dt;
     player.pos.y += player.velocity.y * dt;
