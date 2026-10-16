@@ -56,6 +56,24 @@ void movePlayer() {
 
     player.pos.x += player.velocity.x * dt;
     player.pos.y += player.velocity.y * dt;
+
+    // horizontal clamping
+    if (player.pos.x < 0.0f) {
+        player.pos.x = 0.0f;
+        player.velocity.x = 0.0f;
+    } else if (player.pos.x > (float)SCREEN_WIDTH - player.dimensions.x) {
+        player.pos.x = (float)SCREEN_WIDTH - player.dimensions.x;
+        player.velocity.x = 0.0f;
+    }
+
+    // vertical clamping
+    if (player.pos.y < 0.0f) {
+        player.pos.y = 0.0f;
+        player.velocity.y = 0.0f;
+    } else if (player.pos.y > (float)SCREEN_HEIGHT - player.dimensions.y) {
+        player.pos.y = (float)SCREEN_HEIGHT - player.dimensions.y;
+        player.velocity.y = 0.0f;
+    }
 }
 
 int main() {
