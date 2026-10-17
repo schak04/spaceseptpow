@@ -3,3 +3,4 @@ build/
 drafts/
 assets/imported/
 planning/
+*.patch
