@@ -89,7 +89,7 @@ void movePlayer() {
 }
 
 const float projectileSpeed = 2000.0f;
-void updateProjectiles() {
+void updateProjectiles() {  // TODO: separate spawning and updating projectiles later
     const float dt = GetFrameTime();
 
     // find a free slot in the projectiles array to spawn a projectile
