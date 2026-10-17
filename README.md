@@ -19,22 +19,18 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 ---
 
-## Controls
+## Gameplay and Design
+
+**Core Loop:** Move, shoot, collect energy, survive harder waves, die, restart.
+
+### Controls
 
 | Input             | Action |
 | ----------------- | ------ |
 | WASD / Arrow Keys | Move   |
 | Space             | Shoot  |
 
----
-
-## Core Loop
-
-Move, shoot, collect energy, survive harder waves, die, restart.
-
----
-
-## Design and Rules
+### Rules and Mechanics
 
 - **Movement:** 8 directions with inertia as the primary mechanic. Input provides acceleration, drag dampens speed, and position updates from velocity and delta time. Must feel responsive, not floaty.
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
@@ -44,9 +40,7 @@ Move, shoot, collect energy, survive harder waves, die, restart.
 - **Score:** Points awarded per kill, with higher payouts for special enemies. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over. Waves run strictly inside Playing.
 
----
-
-## Enemies
+### Enemies
 
 | Type    | Behaviour                                                            | HP     | Score  | Drops Energy       |
 | ------- | -------------------------------------------------------------------- | ------ | ------ | ------------------ |
@@ -55,9 +49,7 @@ Move, shoot, collect energy, survive harder waves, die, restart.
 
 Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
----
-
-## UI
+### UI
 
 - **HUD:** Energy, score, and wave counter
 - **Start screen:** Title, controls, and start prompt
@@ -65,22 +57,28 @@ Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
 ---
 
-## Playtest Tuning
+## Roadmap and Tuning
+
+### Playtest Tuning
 
 Parameters to dial in during playtesting:
 
 - [ ] Starting energy, pickup amounts, and drop chance
 - [ ] Wave scaling values and constraints
 
----
-
-## Stretch Goals (Post-MVP)
+### Stretch Goals (Post-MVP)
 
 Sound effects, starfield background, simple boss, ranged-attacking enemy, persistent high score, gamepad support, and a Steam Deck build.
 
 ---
 
-## References
+## Credits and References
+
+### Assets and Credits
+
+- **Spaceships:** [FREE Spaceships Vol. 1](https://gisha.itch.io/spaceships-asset-pack) by [gishadev](https://itch.io/profile/gisha), licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+
+### References
 
 - https://www.raylib.com/cheatsheet/cheatsheet.html
 - https://www.raylib.com/examples/core/loader.html?name=core_basic_window
