@@ -7,8 +7,9 @@
 #define GAME_NAME "SpaceSept Pow!"
 
 struct Player {
+    Texture2D texture;
     Vector2 pos = {(float)SCREEN_WIDTH * (1.0f / 2.0f), (float)SCREEN_HEIGHT * (94.0f / 100.0f)};
-    Vector2 dimensions = {40, 40};
+    Vector2 dimensions = {80, 80};
     Vector2 velocity = {0.0f, 0.0f};
     Vector2 acceleration = {0.0f, 0.0f};
 };
@@ -80,20 +81,27 @@ int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
 
+    // TODO: add error handling later sometime
+    player.texture = LoadTexture("assets/player/player-spaceship-blue.png");
+
     while (!WindowShouldClose()) {
         movePlayer();
 
         BeginDrawing();
 
         ClearBackground(BLACK);
-        DrawText(GAME_NAME, (float)SCREEN_HEIGHT * (1.0f / 80.0f),
-                 (float)SCREEN_WIDTH * (1.0f / 40.0f), 32, RAYWHITE);
 
-        DrawRectangleV(player.pos, player.dimensions, BLUE);
+        // NOTE: Rectangle -> x, y, width, height
+        Rectangle srcRect = {0.0f, 0.0f, (float)player.texture.width, (float)player.texture.height};
+        Rectangle destRect = {player.pos.x, player.pos.y, player.dimensions.x, player.dimensions.y};
+        Vector2 origin = {0.0f, 0.0f};
+        float rotation = 0.0f;
+        DrawTexturePro(player.texture, srcRect, destRect, origin, rotation, WHITE);
 
         EndDrawing();
     }
 
+    UnloadTexture(player.texture);
     CloseWindow();
 
     return 0;
