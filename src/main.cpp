@@ -16,6 +16,17 @@ struct Player {
 
 Player player;
 
+#define MAX_PROJECTILES 100
+
+struct Projectile {
+    Vector2 pos = {player.pos.x + (player.dimensions.x / 2.0f), player.pos.y};
+    Vector2 velocity = {0.0f, 0.0f};
+    float radius = 4.0f;
+    bool active = false;
+};
+
+Projectile projectiles[MAX_PROJECTILES];
+
 // input -> acceleration -> velocity -> position
 void movePlayer() {
     const float dt = GetFrameTime();
@@ -77,6 +88,53 @@ void movePlayer() {
     }
 }
 
+const float projectileSpeed = 2000.0f;
+void updateProjectiles() {
+    const float dt = GetFrameTime();
+
+    // find a free slot in the projectiles array to spawn a projectile
+    // and skip firing if all slots are occupied
+    if (IsKeyPressed(KEY_SPACE)) {
+        for (int i = 0; i < MAX_PROJECTILES; i++) {
+            if (!projectiles[i].active) {
+                // projectile spawning
+                projectiles[i].pos = {player.pos.x + (player.dimensions.x / 2.0f), player.pos.y};
+                projectiles[i].velocity = {0.0f, -projectileSpeed};
+                projectiles[i].active = true;
+                break;
+            }
+        }
+    }
+
+    // update active projectiles and remove when out of screen
+    for (int i = 0; i < MAX_PROJECTILES; i++) {
+        if (!projectiles[i].active) continue;
+
+        projectiles[i].pos.x += projectiles[i].velocity.x * dt;
+        projectiles[i].pos.y += projectiles[i].velocity.y * dt;
+
+        // remove projectile if its
+        // bottom edge crosses the game's upper boundary
+        // or top edge -> lower boundary
+        // or right edge -> left boundary
+        // or left edge -> right boundary
+        if (projectiles[i].pos.y + projectiles[i].radius < 0.0f ||
+            projectiles[i].pos.y - projectiles[i].radius > (float)SCREEN_HEIGHT ||
+            projectiles[i].pos.x + projectiles[i].radius < 0.0f ||
+            projectiles[i].pos.x - projectiles[i].radius > (float)SCREEN_WIDTH) {
+            projectiles[i].active = false;
+        }
+    }
+}
+
+void drawProjectiles() {
+    for (int i = 0; i < MAX_PROJECTILES; i++) {
+        if (projectiles[i].active) {
+            DrawCircleV(projectiles[i].pos, projectiles[i].radius, GOLD);
+        }
+    }
+}
+
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
@@ -86,10 +144,13 @@ int main() {
 
     while (!WindowShouldClose()) {
         movePlayer();
+        updateProjectiles();
 
         BeginDrawing();
 
         ClearBackground(BLACK);
+
+        drawProjectiles();
 
         // NOTE: Rectangle -> x, y, width, height
         Rectangle srcRect = {0.0f, 0.0f, (float)player.texture.width, (float)player.texture.height};
