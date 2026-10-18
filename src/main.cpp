@@ -27,6 +27,29 @@ struct Projectile {
 
 Projectile projectiles[MAX_PROJECTILES];
 
+#define MAX_REGULAR_ENEMIES 20
+#define MAX_SPECIAL_ENEMIES 5
+
+struct RegularEnemy {
+    Texture2D texture;
+    int HP = 100;
+    Vector2 pos = {0.0f, 0.0f};
+    Vector2 dimensions = {100, 100};
+    Vector2 velocity = {0.0f, 0.0f};
+};
+
+struct SpecialEnemy {
+    Texture2D texture;
+    int HP = 200;
+    Vector2 pos = {0.0f, 0.0f};
+    Vector2 dimensions = {100, 100};
+    Vector2 velocity = {0.0f, 0.0f};
+    const float eneryDropChance = 0.05;
+};
+
+RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
+SpecialEnemy spcialEnemies[MAX_REGULAR_ENEMIES];
+
 // input -> acceleration -> velocity -> position
 void movePlayer() {
     const float dt = GetFrameTime();
@@ -135,12 +158,16 @@ void drawProjectiles() {
     }
 }
 
+void drawEnemies() {
+    // TODO: continue from here
+}
+
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
 
     // TODO: add error handling later sometime
-    player.texture = LoadTexture("assets/player/player-spaceship-blue.png");
+    player.texture = LoadTexture("assets/player/player-spaceship.png");
 
     while (!WindowShouldClose()) {
         movePlayer();
