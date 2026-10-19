@@ -48,7 +48,7 @@ struct SpecialEnemy {
 };
 
 RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
-SpecialEnemy spcialEnemies[MAX_REGULAR_ENEMIES];
+SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
 
 // input -> acceleration -> velocity -> position
 void movePlayer() {
