@@ -1,6 +1,7 @@
 #include <raylib.h>
 
 #include <cmath>
+#include <ctime>
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
@@ -31,12 +32,13 @@ Projectile projectiles[MAX_PROJECTILES];
 #define MAX_SPECIAL_ENEMIES 5
 
 struct RegularEnemy {
-    Texture2D texture;
     int HP = 100;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};
+    bool active = false;
 };
+Texture2D regularEnemyTexture;
 
 struct SpecialEnemy {
     Texture2D texture;
@@ -158,19 +160,71 @@ void drawProjectiles() {
     }
 }
 
+void spawnEnemies() {
+    for (RegularEnemy& enemy : regularEnemies) {
+        if (!enemy.active) {
+            enemy.active = true;
+            // NOTE:
+            // GetRandomValue() uses a pseudo random number generator,
+            // and produces a sequence of numbers that appears random but is deterministic.
+            // Without seeding, it might give the same sequence every time the game is launched.
+            // SetRandomSeed() changes the starting state of that generator.
+            enemy.pos.x = (float)GetRandomValue(0, SCREEN_WIDTH - (int)enemy.dimensions.x);
+            enemy.pos.y = (float)GetRandomValue(0, SCREEN_HEIGHT - (int)enemy.dimensions.y);
+            break;
+        }
+    }
+}
+
+void updateEnemies() {
+    const float dt = GetFrameTime();
+
+    for (RegularEnemy& enemy : regularEnemies) {
+        if (!enemy.active) continue;
+
+        enemy.pos.x += enemy.velocity.x * dt;
+        enemy.pos.y += enemy.velocity.y * dt;
+
+        // remove enemy when it's outta the screen
+        // conditions:
+        // if the right edge crosses the left boundary of the screen
+        // or left edge crosses right boundary
+        // or bottom edge crosses upper boundary
+        // or top edge crosses lower boundary
+        if (enemy.pos.x + enemy.dimensions.x / 2.0f < 0.0f ||
+            enemy.pos.x - enemy.dimensions.x / 2.0f > (float)SCREEN_WIDTH ||
+            enemy.pos.y + enemy.dimensions.y / 2.0f < 0.0f ||
+            enemy.pos.y - enemy.dimensions.y / 2.0f > (float)SCREEN_HEIGHT) {
+            enemy.active = false;
+        }
+    }
+}
+
 void drawEnemies() {
-    // TODO: continue from here
+    for (const RegularEnemy& enemy : regularEnemies) {
+        if (enemy.active) {
+            // TODO: continue from here
+        }
+    }
 }
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
 
+    // change the starting state of the random number generator used by GetRandomValue()
+    // so it's truly random
+    SetRandomSeed((unsigned int)time(nullptr));
+
     // TODO: add error handling later sometime
     player.texture = LoadTexture("assets/player/player-spaceship.png");
 
+    regularEnemyTexture = LoadTexture("assets/enemies/regular/regular-enemy-spaceship.png");
+
     while (!WindowShouldClose()) {
         movePlayer();
+        spawnEnemies();
+        updateEnemies();
         updateProjectiles();
 
         BeginDrawing();
@@ -186,10 +240,14 @@ int main() {
         float rotation = 0.0f;
         DrawTexturePro(player.texture, srcRect, destRect, origin, rotation, WHITE);
 
+        // enemy
+        drawEnemies();
+
         EndDrawing();
     }
 
     UnloadTexture(player.texture);
+    UnloadTexture(regularEnemyTexture);
     CloseWindow();
 
     return 0;
