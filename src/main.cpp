@@ -160,6 +160,7 @@ void drawProjectiles() {
     }
 }
 
+const float regularEnemySpeed = 100.0f;
 void spawnEnemies() {
     for (RegularEnemy& enemy : regularEnemies) {
         if (!enemy.active) {
@@ -170,7 +171,7 @@ void spawnEnemies() {
             // Without seeding, it might give the same sequence every time the game is launched.
             // SetRandomSeed() changes the starting state of that generator.
             enemy.pos.x = (float)GetRandomValue(0, SCREEN_WIDTH - (int)enemy.dimensions.x);
-            enemy.pos.y = (float)GetRandomValue(0, SCREEN_HEIGHT - (int)enemy.dimensions.y);
+            enemy.velocity = {0.0f, regularEnemySpeed};
             break;
         }
     }
@@ -203,7 +204,17 @@ void updateEnemies() {
 void drawEnemies() {
     for (const RegularEnemy& enemy : regularEnemies) {
         if (enemy.active) {
-            // TODO: continue from here
+            // NOTE: source rect -> which portion of the texture to use
+            // dest rect -> where & at what size to draw that portion on the screen
+
+            // NOTE: Rectangle -> x, y, width, height
+            Rectangle srcRect = {0.0f, 0.0f, (float)regularEnemyTexture.width,
+                                 (float)regularEnemyTexture.height};
+            Rectangle destRect = {enemy.pos.x, enemy.pos.y, enemy.dimensions.x, enemy.dimensions.y};
+            Vector2 origin = {0.0f, 0.0f};
+            float rotation = 180.0f;
+
+            DrawTexturePro(regularEnemyTexture, srcRect, destRect, origin, rotation, WHITE);
         }
     }
 }
