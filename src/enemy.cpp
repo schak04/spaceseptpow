@@ -7,6 +7,8 @@ Texture2D regularEnemyTexture;
 float spawnTimer = 0.0f;  // to track time elapsed over frames
 const float spawnInterval = 1.5f;
 const float regularEnemySpeed = 100.0f;
+
+// TODO: implement continuous spawning
 void spawnEnemies() {
     spawnTimer += GetFrameTime();
 
