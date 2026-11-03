@@ -160,10 +160,15 @@ void drawProjectiles() {
     }
 }
 
+float spawnTimer = 0.0f;  // to track time elapsed over frames
+const float spawnInterval = 1.5f;
 const float regularEnemySpeed = 100.0f;
 void spawnEnemies() {
+    spawnTimer += GetFrameTime();
+
     for (RegularEnemy& enemy : regularEnemies) {
-        if (!enemy.active) {
+        if ((spawnTimer >= spawnInterval) && !enemy.active) {
+            spawnTimer = 0.0f;
             enemy.active = true;
             // NOTE:
             // GetRandomValue() uses a pseudo random number generator,
