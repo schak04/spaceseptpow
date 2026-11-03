@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) # to use standard C++ rather than compiler-specific extensions
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # CMake handles creation of compile_commands.json so that my LSP doesn't throw errors
+
 include(FetchContent)
 
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # disable raylib examples
@@ -19,7 +21,14 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(raylib)
 
-add_executable(spaceseptpow src/main.cpp)
+add_executable(spaceseptpow
+  src/main.cpp
+  src/player.cpp
+  src/projectile.cpp
+  src/enemy.cpp
+)
+
+target_include_directories(spaceseptpow PRIVATE include)
 
 # NOTE: PRIVATE = raylib is needed by spaceseptpow itself and isn't something CMake needs to propagate to targets that depend on spaceseptpow
-target_link_libraries(spaceseptpow PRIVATE raylib) 
+target_link_libraries(spaceseptpow PRIVATE raylib)
