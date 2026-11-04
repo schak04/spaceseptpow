@@ -12,16 +12,27 @@ const float regularEnemySpeed = 100.0f;
 void spawnEnemies() {
     spawnTimer += GetFrameTime();
 
+    if (spawnTimer < spawnInterval) {
+        return;
+    } else {
+        spawnTimer = 0.0f;
+    }
+
+    // TraceLog(LOG_INFO, "Spawn attempt. Timer: %.2f", spawnTimer);
     for (RegularEnemy& enemy : regularEnemies) {
-        if ((spawnTimer >= spawnInterval) && !enemy.active) {
-            spawnTimer = 0.0f;
+        if (!enemy.active) {
             enemy.active = true;
+            // TraceLog(LOG_INFO, "Enemy spawned!");
             // NOTE:
             // GetRandomValue() uses a pseudo random number generator,
             // and produces a sequence of numbers that appears random but is deterministic.
             // Without seeding, it might give the same sequence every time the game is launched.
             // SetRandomSeed() changes the starting state of that generator.
-            enemy.pos.x = (float)GetRandomValue(0, SCREEN_WIDTH - (int)enemy.dimensions.x);
+
+            // pos represents the center
+            enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
+                                                SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
+            enemy.pos.y = -enemy.dimensions.y / 2.0f;
             enemy.velocity = {0.0f, regularEnemySpeed};
             break;
         }
@@ -29,10 +40,13 @@ void spawnEnemies() {
 }
 
 void updateEnemies() {
+    // int activeCount = 0;
     const float dt = GetFrameTime();
 
     for (RegularEnemy& enemy : regularEnemies) {
         if (!enemy.active) continue;
+
+        // activeCount++;
 
         enemy.pos.x += enemy.velocity.x * dt;
         enemy.pos.y += enemy.velocity.y * dt;
@@ -48,8 +62,11 @@ void updateEnemies() {
             enemy.pos.y + enemy.dimensions.y / 2.0f < 0.0f ||
             enemy.pos.y - enemy.dimensions.y / 2.0f > (float)SCREEN_HEIGHT) {
             enemy.active = false;
+            // activeCount--;
         }
     }
+
+    // TraceLog(LOG_INFO, "Active enemies: %d", activeCount);
 }
 
 void drawEnemies() {
@@ -61,8 +78,10 @@ void drawEnemies() {
             // NOTE: Rectangle -> x, y, width, height
             Rectangle srcRect = {0.0f, 0.0f, (float)regularEnemyTexture.width,
                                  (float)regularEnemyTexture.height};
-            Rectangle destRect = {enemy.pos.x, enemy.pos.y, enemy.dimensions.x, enemy.dimensions.y};
-            Vector2 origin = {0.0f, 0.0f};
+            Rectangle destRect = {enemy.pos.x - enemy.dimensions.x / 2.0f,
+                                  enemy.pos.y - enemy.dimensions.y / 2.0f, enemy.dimensions.x,
+                                  enemy.dimensions.y};
+            Vector2 origin = {enemy.dimensions.x / 2.0f, enemy.dimensions.y / 2.0f};
             float rotation = 180.0f;
 
             DrawTexturePro(regularEnemyTexture, srcRect, destRect, origin, rotation, WHITE);
