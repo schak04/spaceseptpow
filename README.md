@@ -42,10 +42,10 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 ### Enemies
 
-| Type    | Behaviour                                                            | HP     | Score  | Drops Energy       |
-| ------- | -------------------------------------------------------------------- | ------ | ------ | ------------------ |
-| Basic   | Spawns at arena edge, moves straight at player, deals contact damage | Low    | Low    | No                 |
-| Special | Faster or alternate movement, deals contact damage                   | Higher | Higher | Yes (chance based) |
+| Type    | Behaviour                                                             | HP     | Score  | Drops Energy       |
+| ------- | --------------------------------------------------------------------- | ------ | ------ | ------------------ |
+| Regular | Spawns at arena edge, moves vertically straight, deals contact damage | Low    | Low    | No                 |
+| Special | Similar to regular with random zig-zag motion, deals contact damage   | Higher | Higher | Yes (chance based) |
 
 Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
