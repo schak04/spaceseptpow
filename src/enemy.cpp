@@ -8,7 +8,6 @@ float spawnTimer = 0.0f;  // to track time elapsed over frames
 const float spawnInterval = 1.5f;
 const float regularEnemySpeed = 100.0f;
 
-// TODO: implement continuous spawning
 void spawnEnemies() {
     spawnTimer += GetFrameTime();
 
@@ -29,10 +28,23 @@ void spawnEnemies() {
             // Without seeding, it might give the same sequence every time the game is launched.
             // SetRandomSeed() changes the starting state of that generator.
 
+            // NOTE:
+            // reusing an inactive enemy slot does NOT reset its previous state
+            // its position, velocity, HP, etc. retain their old values
+            // that is why it is important to explicitly initialise (reinitialise)
+            // the necessary fields whenever spawning an enemy
+
+            // lack of pos.y reinit caused non-continuous spawning
+            // because when the enemy using this slot goes out of the screen
+            // and that slot becomes inactive
+            // its pos.y still remains the same
+            // so it's important to reinit it
+
             // pos represents the center
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
+
             enemy.velocity = {0.0f, regularEnemySpeed};
             break;
         }
