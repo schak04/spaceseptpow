@@ -1,4 +1,5 @@
 // TODO: prevent overlapping spawns
+// smoothen random zig-zag motion of special enemies
 
 #include "enemy.hpp"
 
@@ -8,10 +9,10 @@ Texture2D regularEnemyTexture;
 Texture2D specialEnemyTexture;
 
 float regularEnemySpawnTimer = 0.0f;
-const float regularEnemySpawnInterval = 1.5f;
+const float regularEnemySpawnInterval = 1.0f;
 const float regularEnemySpeed = 100.0f;
 float specialEnemySpawnTimer = 0.0f;
-const float specialEnemySpawnInterval = 5.0f;
+const float specialEnemySpawnInterval = 2.5f;
 const float specialEnemySpeed = 120.0f;
 
 void spawnRegularEnemies() {

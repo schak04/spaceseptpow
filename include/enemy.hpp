@@ -4,8 +4,8 @@
 
 #include "constants.hpp"
 
-#define MAX_REGULAR_ENEMIES 20
-#define MAX_SPECIAL_ENEMIES 5
+#define MAX_REGULAR_ENEMIES 40
+#define MAX_SPECIAL_ENEMIES 10
 
 struct RegularEnemy {
     int HP = 100;
