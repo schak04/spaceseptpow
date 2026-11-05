@@ -19,11 +19,14 @@ int main() {
     player.texture = LoadTexture("assets/player/player-spaceship.png");
 
     regularEnemyTexture = LoadTexture("assets/enemies/regular/regular-enemy-spaceship.png");
+    specialEnemyTexture = LoadTexture("assets/enemies/special/special-enemy-spaceship.png");
 
     while (!WindowShouldClose()) {
         movePlayer();
-        spawnEnemies();
-        updateEnemies();
+        spawnRegularEnemies();
+        spawnSpecialEnemies();
+        updateRegularEnemies();
+        updateSpecialEnemies();
         updateProjectiles();
 
         BeginDrawing();
@@ -32,13 +35,15 @@ int main() {
 
         drawProjectiles();
         drawPlayer();
-        drawEnemies();
+        drawRegularEnemies();
+        drawSpecialEnemies();
 
         EndDrawing();
     }
 
     UnloadTexture(player.texture);
     UnloadTexture(regularEnemyTexture);
+    UnloadTexture(specialEnemyTexture);
     CloseWindow();
 
     return 0;

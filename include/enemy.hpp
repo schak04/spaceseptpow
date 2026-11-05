@@ -16,18 +16,22 @@ struct RegularEnemy {
 };
 
 struct SpecialEnemy {
-    Texture2D texture;
     int HP = 200;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};
     const float eneryDropChance = 0.05;
+    bool active = false;
 };
 
 extern RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
 extern SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
 extern Texture2D regularEnemyTexture;
+extern Texture2D specialEnemyTexture;
 
-void spawnEnemies();
-void updateEnemies();
-void drawEnemies();
+void spawnRegularEnemies();
+void updateRegularEnemies();
+void drawRegularEnemies();
+void spawnSpecialEnemies();
+void updateSpecialEnemies();
+void drawSpecialEnemies();
