@@ -1,3 +1,5 @@
+// TODO: prevent overlapping spawns
+
 #include "enemy.hpp"
 
 RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
@@ -106,16 +108,26 @@ void moveRegularEnemies() {
     // TraceLog(LOG_INFO, "Active enemies: %d", activeCount);
 }
 
+// to facilitate random zig-zag motion
+const float specialEnemyRandomZigZagMotionInterval = 1.5f;
+
 void moveSpecialEnemies() {
     const float dt = GetFrameTime();
 
     for (SpecialEnemy& enemy : specialEnemies) {
+        enemy.randomZigZagMotionTimer += dt;
         if (!enemy.active) continue;
 
-        enemy.pos.x += enemy.velocity.x * dt;
+        // basic and abrupt random zig-zag motion for now
+        // TODO: improve and smoothen this later
+        if (enemy.randomZigZagMotionTimer < specialEnemyRandomZigZagMotionInterval) {
+            enemy.randomness = 0;
+        } else {
+            enemy.randomness = GetRandomValue(-10000, 10000);
+            enemy.randomZigZagMotionTimer = 0.0f;
+        }
+        enemy.pos.x += (enemy.velocity.x + enemy.randomness) * dt;
         enemy.pos.y += enemy.velocity.y * dt;
-
-        // TODO: add random zig-zag motion soon
 
         if (enemy.pos.x + enemy.dimensions.x / 2.0f < 0.0f ||
             enemy.pos.x - enemy.dimensions.x / 2.0f > (float)SCREEN_WIDTH ||

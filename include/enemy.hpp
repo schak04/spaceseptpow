@@ -22,6 +22,8 @@ struct SpecialEnemy {
     Vector2 velocity = {0.0f, 0.0f};
     const float eneryDropChance = 0.05;
     bool active = false;
+    float randomZigZagMotionTimer = 0.0f;
+    int randomness = 0;  // for random zig-zag motion
 };
 
 extern RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
