@@ -15,5 +15,5 @@ struct Projectile {
 
 extern Projectile projectiles[MAX_PROJECTILES];
 
-void updateProjectiles();
+void moveProjectiles();
 void drawProjectiles();

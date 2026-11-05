@@ -76,7 +76,7 @@ void spawnSpecialEnemies() {
     }
 }
 
-void updateRegularEnemies() {
+void moveRegularEnemies() {
     // int activeCount = 0;
     const float dt = GetFrameTime();
 
@@ -106,7 +106,7 @@ void updateRegularEnemies() {
     // TraceLog(LOG_INFO, "Active enemies: %d", activeCount);
 }
 
-void updateSpecialEnemies() {
+void moveSpecialEnemies() {
     const float dt = GetFrameTime();
 
     for (SpecialEnemy& enemy : specialEnemies) {

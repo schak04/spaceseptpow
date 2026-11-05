@@ -5,7 +5,7 @@
 Projectile projectiles[MAX_PROJECTILES];
 
 const float projectileSpeed = 2000.0f;
-void updateProjectiles() {  // TODO: separate spawning and updating projectiles later
+void moveProjectiles() {  // TODO: separate spawning and updating projectiles later
     const float dt = GetFrameTime();
 
     // find a free slot in the projectiles array to spawn a projectile
@@ -22,7 +22,7 @@ void updateProjectiles() {  // TODO: separate spawning and updating projectiles 
         }
     }
 
-    // update active projectiles and remove when out of screen
+    // move active projectiles and remove when out of screen
     for (int i = 0; i < MAX_PROJECTILES; i++) {
         if (!projectiles[i].active) continue;
 

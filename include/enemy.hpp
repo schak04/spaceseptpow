@@ -30,8 +30,8 @@ extern Texture2D regularEnemyTexture;
 extern Texture2D specialEnemyTexture;
 
 void spawnRegularEnemies();
-void updateRegularEnemies();
+void moveRegularEnemies();
 void drawRegularEnemies();
 void spawnSpecialEnemies();
-void updateSpecialEnemies();
+void moveSpecialEnemies();
 void drawSpecialEnemies();

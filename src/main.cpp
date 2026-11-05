@@ -25,9 +25,9 @@ int main() {
         movePlayer();
         spawnRegularEnemies();
         spawnSpecialEnemies();
-        updateRegularEnemies();
-        updateSpecialEnemies();
-        updateProjectiles();
+        moveRegularEnemies();
+        moveSpecialEnemies();
+        moveProjectiles();
 
         BeginDrawing();
 
