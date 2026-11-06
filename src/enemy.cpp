@@ -46,8 +46,10 @@ void spawnRegularEnemies() {
             // and that slot becomes inactive
             // its pos.y still remains the same
             // so it's important to reinit it
+            // and same with HP
 
             // pos represents the center
+            enemy.HP = REGULAR_ENEMY_HP;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
@@ -70,6 +72,7 @@ void spawnSpecialEnemies() {
     for (SpecialEnemy& enemy : specialEnemies) {
         if (!enemy.active) {
             enemy.active = true;
+            enemy.HP = SPECIAL_ENEMY_HP;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;

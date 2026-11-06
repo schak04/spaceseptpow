@@ -25,6 +25,7 @@ add_executable(spaceseptpow
   src/main.cpp
   src/player.cpp
   src/projectile.cpp
+  src/projectile-enemy-collision.cpp
   src/enemy.cpp
 )
 

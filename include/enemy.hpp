@@ -6,9 +6,11 @@
 
 #define MAX_REGULAR_ENEMIES 40
 #define MAX_SPECIAL_ENEMIES 10
+#define REGULAR_ENEMY_HP 100
+#define SPECIAL_ENEMY_HP 200
 
 struct RegularEnemy {
-    int HP = 100;
+    int HP = REGULAR_ENEMY_HP;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};
@@ -16,7 +18,7 @@ struct RegularEnemy {
 };
 
 struct SpecialEnemy {
-    int HP = 200;
+    int HP = SPECIAL_ENEMY_HP;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};

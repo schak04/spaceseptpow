@@ -5,6 +5,7 @@
 #include "constants.hpp"
 #include "enemy.hpp"
 #include "player.hpp"
+#include "projectile-enemy-collision.hpp"
 #include "projectile.hpp"
 
 int main() {
@@ -28,6 +29,7 @@ int main() {
         moveRegularEnemies();
         moveSpecialEnemies();
         moveProjectiles();
+        detectProjectileEnemyCollision();
 
         BeginDrawing();
 
