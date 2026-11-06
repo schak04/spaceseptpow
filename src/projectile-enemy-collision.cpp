@@ -45,7 +45,39 @@ void detectProjectileEnemyCollision() {
 
             if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
                 projectile.active = false;
-                enemy.HP -= 50;
+                enemy.HP -= PROJECTILE_IMPACT;
+
+                if (enemy.HP <= 0) {
+                    enemy.active = false;
+                }
+            }
+        }
+    }
+
+    for (SpecialEnemy& enemy : specialEnemies) {
+        if (!enemy.active) continue;
+
+        const float visibleLeft = 71.0f;
+        const float visibleRight = 429.0f;
+        const float visibleTop = 102.0f;
+        const float visibleBottom = 398.0f;
+
+        Rectangle enemyRec = {
+            enemy.pos.x - enemy.dimensions.x / 2.0f +
+                (specialEnemyTexture.width - visibleRight) / specialEnemyTexture.width *
+                    enemy.dimensions.x,
+            enemy.pos.y - enemy.dimensions.y / 2.0f +
+                (specialEnemyTexture.height - visibleBottom) / specialEnemyTexture.height *
+                    enemy.dimensions.y,
+            (visibleRight - visibleLeft) / specialEnemyTexture.width * enemy.dimensions.x,
+            (visibleBottom - visibleTop) / specialEnemyTexture.height * enemy.dimensions.y};
+
+        for (Projectile& projectile : projectiles) {
+            if (!projectile.active) continue;
+
+            if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
+                projectile.active = false;
+                enemy.HP -= PROJECTILE_IMPACT;
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;

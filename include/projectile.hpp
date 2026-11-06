@@ -5,6 +5,7 @@
 #include "constants.hpp"
 
 #define MAX_PROJECTILES 100
+#define PROJECTILE_IMPACT 50
 
 struct Projectile {
     Vector2 pos = {0.0f, 0.0f};
