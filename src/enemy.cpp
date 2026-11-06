@@ -148,9 +148,7 @@ void drawRegularEnemies() {
             // NOTE: Rectangle -> x, y, width, height
             Rectangle srcRect = {0.0f, 0.0f, (float)regularEnemyTexture.width,
                                  (float)regularEnemyTexture.height};
-            Rectangle destRect = {enemy.pos.x - enemy.dimensions.x / 2.0f,
-                                  enemy.pos.y - enemy.dimensions.y / 2.0f, enemy.dimensions.x,
-                                  enemy.dimensions.y};
+            Rectangle destRect = {enemy.pos.x, enemy.pos.y, enemy.dimensions.x, enemy.dimensions.y};
             Vector2 origin = {enemy.dimensions.x / 2.0f, enemy.dimensions.y / 2.0f};
             float rotation = 180.0f;
 
@@ -164,9 +162,7 @@ void drawSpecialEnemies() {
         if (enemy.active) {
             Rectangle srcRect = {0.0f, 0.0f, (float)specialEnemyTexture.width,
                                  (float)specialEnemyTexture.height};
-            Rectangle destRect = {enemy.pos.x - enemy.dimensions.x / 2.0f,
-                                  enemy.pos.y - enemy.dimensions.y / 2.0f, enemy.dimensions.x,
-                                  enemy.dimensions.y};
+            Rectangle destRect = {enemy.pos.x, enemy.pos.y, enemy.dimensions.x, enemy.dimensions.y};
             Vector2 origin = {enemy.dimensions.x / 2.0f, enemy.dimensions.y / 2.0f};
             float rotation = 180.0f;
 
