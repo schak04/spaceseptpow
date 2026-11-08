@@ -10,7 +10,7 @@ void moveProjectiles() {  // TODO: separate spawning and updating projectiles la
 
     // find a free slot in the projectiles array to spawn a projectile
     // and skip firing if all slots are occupied
-    if (IsKeyPressed(KEY_SPACE)) {
+    if (player.active && IsKeyPressed(KEY_SPACE)) {
         for (int i = 0; i < MAX_PROJECTILES; i++) {
             if (!projectiles[i].active) {
                 // projectile spawning

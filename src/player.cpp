@@ -6,6 +6,8 @@ Player player;
 
 // input -> acceleration -> velocity -> position
 void movePlayer() {
+    if (!player.active) return;
+
     const float dt = GetFrameTime();
     const float inputInducedAcc = 600.0f;
 
@@ -66,6 +68,8 @@ void movePlayer() {
 }
 
 void drawPlayer() {
+    if (!player.active) return;
+
     // NOTE: Rectangle -> x, y, width, height
     Rectangle srcRect = {0.0f, 0.0f, (float)player.texture.width, (float)player.texture.height};
     Rectangle destRect = {player.pos.x, player.pos.y, player.dimensions.x, player.dimensions.y};
