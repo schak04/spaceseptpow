@@ -20,3 +20,4 @@ extern Projectile projectiles[MAX_PROJECTILES];
 
 void moveProjectiles();
 void drawProjectiles();
+void resetProjectiles();

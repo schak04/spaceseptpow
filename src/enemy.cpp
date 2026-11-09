@@ -16,6 +16,21 @@ float specialEnemySpawnTimer = 0.0f;
 const float specialEnemySpawnInterval = 2.5f;
 const float specialEnemySpeed = 120.0f;
 
+void resetEnemies() {
+    for (RegularEnemy& enemy : regularEnemies) enemy.active = false;
+
+    for (SpecialEnemy& enemy : specialEnemies) {
+        enemy.active = false;
+        enemy.randomZigZagMotionTimer = 0.0f;
+        enemy.randomness = 0;
+    }
+
+    for (EnergyPickup& pickup : energyPickups) pickup.active = false;
+
+    regularEnemySpawnTimer = 0.0f;
+    specialEnemySpawnTimer = 0.0f;
+}
+
 void spawnRegularEnemies() {
     regularEnemySpawnTimer += GetFrameTime();
 

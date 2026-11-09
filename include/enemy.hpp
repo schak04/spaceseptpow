@@ -48,3 +48,4 @@ void spawnSpecialEnemies();
 void moveSpecialEnemies();
 void drawSpecialEnemies();
 void drawEnergyPickups();
+void resetEnemies();

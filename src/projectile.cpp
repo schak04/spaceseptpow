@@ -4,6 +4,10 @@
 
 Projectile projectiles[MAX_PROJECTILES];
 
+void resetProjectiles() {
+    for (Projectile& projectile : projectiles) projectile.active = false;
+}
+
 const float projectileSpeed = 2000.0f;
 void moveProjectiles() {  // TODO: separate spawning and updating projectiles later
     const float dt = GetFrameTime();

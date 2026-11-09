@@ -4,10 +4,16 @@
 
 #include "constants.hpp"
 #include "enemy.hpp"
-#include "player.hpp"
 #include "player-enemy-collision.hpp"
+#include "player.hpp"
 #include "projectile-enemy-collision.hpp"
 #include "projectile.hpp"
+
+enum class GameState { Start, Playing, GameOver };
+
+void drawCenteredText(const char* text, int y, int fontSize, Color color) {
+    DrawText(text, (SCREEN_WIDTH - MeasureText(text, fontSize)) / 2, y, fontSize, color);
+}
 
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
@@ -23,25 +29,54 @@ int main() {
     regularEnemyTexture = LoadTexture("assets/enemies/regular/regular-enemy-spaceship.png");
     specialEnemyTexture = LoadTexture("assets/enemies/special/special-enemy-spaceship.png");
 
+    GameState gameState = GameState::Start;
+
     while (!WindowShouldClose()) {
-        movePlayer();
-        spawnRegularEnemies();
-        spawnSpecialEnemies();
-        moveRegularEnemies();
-        moveSpecialEnemies();
-        moveProjectiles();
-        detectProjectileEnemyCollision();
-        detectPlayerEnemyCollision();
+        if (gameState == GameState::Start && IsKeyPressed(KEY_ENTER)) {
+            gameState = GameState::Playing;
+        } else if (gameState == GameState::GameOver && IsKeyPressed(KEY_ENTER)) {
+            Texture2D playerTexture = player.texture;
+            player = Player{};
+            player.texture = playerTexture;
+            resetEnemies();
+            resetProjectiles();
+            gameState = GameState::Playing;
+        }
+
+        if (gameState == GameState::Playing) {
+            movePlayer();
+            spawnRegularEnemies();
+            spawnSpecialEnemies();
+            moveRegularEnemies();
+            moveSpecialEnemies();
+            moveProjectiles();
+            detectProjectileEnemyCollision();
+            detectPlayerEnemyCollision();
+
+            if (!player.active) gameState = GameState::GameOver;
+        }
 
         BeginDrawing();
 
         ClearBackground(BLACK);
 
-        drawProjectiles();
-        drawPlayer();
-        drawRegularEnemies();
-        drawSpecialEnemies();
-        drawEnergyPickups();
+        if (gameState == GameState::Playing) {
+            drawProjectiles();
+            drawPlayer();
+            drawRegularEnemies();
+            drawSpecialEnemies();
+            drawEnergyPickups();
+            DrawText(TextFormat("HP: %d", player.HP), 20, 20, 24, WHITE);
+            DrawText(TextFormat("Score: %u", player.score), 20, 50, 24, WHITE);
+        } else if (gameState == GameState::Start) {
+            drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, WHITE);
+            drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, LIGHTGRAY);
+        } else {
+            drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, WHITE);
+            drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
+                             LIGHTGRAY);
+            drawCenteredText("Press ENTER to restart", SCREEN_HEIGHT / 2 + 40, 24, LIGHTGRAY);
+        }
 
         EndDrawing();
     }
