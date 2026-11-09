@@ -1,5 +1,6 @@
 #include <raylib.h>
 
+#include <cmath>
 #include <ctime>
 
 #include "constants.hpp"
@@ -30,28 +31,51 @@ int main() {
     specialEnemyTexture = LoadTexture("assets/enemies/special/special-enemy-spaceship.png");
 
     GameState gameState = GameState::Start;
+    int currentWave = 0;
+    bool waveIntermission = false;
+    float waveIntermissionTimer = 0.0f;
 
     while (!WindowShouldClose()) {
         if (gameState == GameState::Start && IsKeyPressed(KEY_ENTER)) {
             gameState = GameState::Playing;
+            currentWave = 1;
+            startWave();
         } else if (gameState == GameState::GameOver && IsKeyPressed(KEY_ENTER)) {
             Texture2D playerTexture = player.texture;
             player = Player{};
             player.texture = playerTexture;
             resetEnemies();
             resetProjectiles();
+            currentWave = 1;
+            waveIntermission = false;
+            startWave();
             gameState = GameState::Playing;
         }
 
         if (gameState == GameState::Playing) {
-            movePlayer();
-            spawnRegularEnemies();
-            spawnSpecialEnemies();
-            moveRegularEnemies();
-            moveSpecialEnemies();
-            moveProjectiles();
-            detectProjectileEnemyCollision();
-            detectPlayerEnemyCollision();
+            if (waveIntermission) {
+                // skipping gameplay updates to keep the cleared arena still during the warning
+                waveIntermissionTimer -= GetFrameTime();
+                if (waveIntermissionTimer <= 0.0f) {
+                    waveIntermission = false;
+                    currentWave++;
+                    startWave();
+                }
+            } else {
+                movePlayer();
+                spawnRegularEnemies();
+                spawnSpecialEnemies();
+                moveRegularEnemies();
+                moveSpecialEnemies();
+                moveProjectiles();
+                detectProjectileEnemyCollision();
+                detectPlayerEnemyCollision();
+
+                if (isWaveComplete()) {
+                    waveIntermission = true;
+                    waveIntermissionTimer = 4.0f;
+                }
+            }
 
             if (!player.active) gameState = GameState::GameOver;
         }
@@ -68,6 +92,14 @@ int main() {
             drawEnergyPickups();
             DrawText(TextFormat("HP: %d", player.HP), 20, 20, 24, WHITE);
             DrawText(TextFormat("Score: %u", player.score), 20, 50, 24, WHITE);
+            DrawText(TextFormat("Wave: %d", currentWave), 20, 80, 24, WHITE);
+            if (waveIntermission) {
+                drawCenteredText("Wave cleared. Look alive, pilot. They're grouping up again.", 120,
+                                 24, YELLOW);
+                drawCenteredText(
+                    TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,
+                    YELLOW);
+            }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, WHITE);
             drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, LIGHTGRAY);

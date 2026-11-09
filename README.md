@@ -36,7 +36,7 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
 - **Energy (HP):** Fixed starting pool. Enemy contact drains it; reaching zero triggers Game Over.
 - **Pickups:** Special enemies can drop energy pickups, but only through projectile-inflicted damage (not player-enemy collision). Flying into one restores a portion of HP.
-- **Waves:** Clearing all active enemies triggers the next wave. Difficulty scales through enemy count, speed, HP, spawn rate, and special enemy frequency without introducing new mechanics.
+- **Waves:** Each wave requires 12 regular and 3 special enemy defeats. Enemies that leave the arena or hit the player are replaced and do not count as defeats, so only destroying the full wave clears it. Clearing a wave pauses gameplay for a four-second warning before the next wave. Enemy stats and spawn intervals are currently fixed; future difficulty scaling will adjust enemy count, speed, HP, spawn rate, and special enemy frequency without adding new mechanics.
 - **Score:** Points awarded per kill, with higher payouts for special enemies. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over. Waves run strictly inside Playing.
 
@@ -51,7 +51,7 @@ Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
 ### UI
 
-- **HUD:** Energy, score, and wave counter
+- **HUD:** Energy, score, wave counter, and next-wave warning with a countdown during the pause
 - **Start screen:** Title, controls, and start prompt
 - **Game Over screen:** Final score, highest wave, restart prompt, and random one-liner flavour text
 

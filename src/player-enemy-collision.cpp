@@ -55,6 +55,7 @@ void detectPlayerEnemyCollision() {
         if (CheckCollisionRecs(playerRec, enemyRec)) {
             player.HP -= ENEMY_IMPACT;
             enemy.active = false;
+            queueRegularEnemyReplacement();
 
             if (player.HP <= 0) {
                 player.active = false;
@@ -88,6 +89,7 @@ void detectPlayerEnemyCollision() {
         if (CheckCollisionRecs(playerRec, enemyRec)) {
             player.HP -= ENEMY_IMPACT;
             enemy.active = false;
+            queueSpecialEnemyReplacement();
 
             if (player.HP <= 0) {
                 player.active = false;

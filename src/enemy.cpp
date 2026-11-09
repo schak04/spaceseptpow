@@ -15,6 +15,44 @@ const float regularEnemySpeed = 100.0f;
 float specialEnemySpawnTimer = 0.0f;
 const float specialEnemySpawnInterval = 2.5f;
 const float specialEnemySpeed = 120.0f;
+int regularEnemiesToSpawn = 0;
+int specialEnemiesToSpawn = 0;
+int regularEnemiesToDefeat = 0;
+int specialEnemiesToDefeat = 0;
+
+void startWave() {
+    regularEnemiesToSpawn = 12;
+    specialEnemiesToSpawn = 3;
+    regularEnemiesToDefeat = regularEnemiesToSpawn;
+    specialEnemiesToDefeat = specialEnemiesToSpawn;
+    regularEnemySpawnTimer = 0.0f;
+    specialEnemySpawnTimer = 0.0f;
+}
+
+bool isWaveComplete() {
+    if (regularEnemiesToSpawn > 0 || specialEnemiesToSpawn > 0 || regularEnemiesToDefeat > 0 ||
+        specialEnemiesToDefeat > 0) {
+        return false;
+    }
+
+    for (const RegularEnemy& enemy : regularEnemies) {
+        if (enemy.active) return false;
+    }
+
+    for (const SpecialEnemy& enemy : specialEnemies) {
+        if (enemy.active) return false;
+    }
+
+    return true;
+}
+
+void registerRegularEnemyDefeat() { regularEnemiesToDefeat--; }
+
+void registerSpecialEnemyDefeat() { specialEnemiesToDefeat--; }
+
+void queueRegularEnemyReplacement() { regularEnemiesToSpawn++; }
+
+void queueSpecialEnemyReplacement() { specialEnemiesToSpawn++; }
 
 void resetEnemies() {
     for (RegularEnemy& enemy : regularEnemies) enemy.active = false;
@@ -29,9 +67,15 @@ void resetEnemies() {
 
     regularEnemySpawnTimer = 0.0f;
     specialEnemySpawnTimer = 0.0f;
+    regularEnemiesToSpawn = 0;
+    specialEnemiesToSpawn = 0;
+    regularEnemiesToDefeat = 0;
+    specialEnemiesToDefeat = 0;
 }
 
 void spawnRegularEnemies() {
+    if (regularEnemiesToSpawn <= 0) return;
+
     regularEnemySpawnTimer += GetFrameTime();
 
     if (regularEnemySpawnTimer < regularEnemySpawnInterval) {
@@ -71,12 +115,15 @@ void spawnRegularEnemies() {
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
 
             enemy.velocity = {0.0f, regularEnemySpeed};
+            regularEnemiesToSpawn--;
             break;
         }
     }
 }
 
 void spawnSpecialEnemies() {
+    if (specialEnemiesToSpawn <= 0) return;
+
     specialEnemySpawnTimer += GetFrameTime();
 
     if (specialEnemySpawnTimer < specialEnemySpawnInterval) {
@@ -93,6 +140,7 @@ void spawnSpecialEnemies() {
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
             enemy.velocity = {0.0f, specialEnemySpeed};
+            specialEnemiesToSpawn--;
             break;
         }
     }
@@ -121,6 +169,7 @@ void moveRegularEnemies() {
             enemy.pos.y + enemy.dimensions.y / 2.0f < 0.0f ||
             enemy.pos.y - enemy.dimensions.y / 2.0f > (float)SCREEN_HEIGHT) {
             enemy.active = false;
+            queueRegularEnemyReplacement();
             // activeCount--;
         }
     }
@@ -154,6 +203,7 @@ void moveSpecialEnemies() {
             enemy.pos.y + enemy.dimensions.y / 2.0f < 0.0f ||
             enemy.pos.y - enemy.dimensions.y / 2.0f > (float)SCREEN_HEIGHT) {
             enemy.active = false;
+            queueSpecialEnemyReplacement();
         }
     }
 }

@@ -50,7 +50,9 @@ void detectProjectileEnemyCollision() {
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
+                    registerRegularEnemyDefeat();
                     player.score += REGULAR_ENEMY_DEFEAT_POINTS;
+                    break;
                 }
             }
         }
@@ -83,6 +85,7 @@ void detectProjectileEnemyCollision() {
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
+                    registerSpecialEnemyDefeat();
                     player.score += SPECIAL_ENEMY_DEFEAT_POINTS;
 
                     if (GetRandomValue(0, 999) < (int)(enemy.eneryDropChance * 1000.0f)) {
@@ -94,6 +97,7 @@ void detectProjectileEnemyCollision() {
                             }
                         }
                     }
+                    break;
                 }
             }
         }
