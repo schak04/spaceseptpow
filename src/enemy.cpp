@@ -5,6 +5,7 @@
 
 RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
 SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
+EnergyPickup energyPickups[MAX_ENERGY_PICKUPS];
 Texture2D regularEnemyTexture;
 Texture2D specialEnemyTexture;
 
@@ -170,6 +171,14 @@ void drawSpecialEnemies() {
             float rotation = 180.0f;
 
             DrawTexturePro(specialEnemyTexture, srcRect, destRect, origin, rotation, WHITE);
+        }
+    }
+}
+
+void drawEnergyPickups() {
+    for (const EnergyPickup& pickup : energyPickups) {
+        if (pickup.active) {
+            DrawCircleV(pickup.pos, pickup.radius, BLUE);
         }
     }
 }

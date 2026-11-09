@@ -81,6 +81,16 @@ void detectProjectileEnemyCollision() {
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
+
+                    if (GetRandomValue(0, 999) < (int)(enemy.eneryDropChance * 1000.0f)) {
+                        for (EnergyPickup& pickup : energyPickups) {
+                            if (!pickup.active) {
+                                pickup.pos = enemy.pos;
+                                pickup.active = true;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
         }

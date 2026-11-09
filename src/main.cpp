@@ -41,6 +41,7 @@ int main() {
         drawPlayer();
         drawRegularEnemies();
         drawSpecialEnemies();
+        drawEnergyPickups();
 
         EndDrawing();
     }
