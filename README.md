@@ -63,7 +63,7 @@ Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
 Parameters to dial in during playtesting:
 
-- [ ] Starting energy, pickup amounts, and drop chance
+- [x] Starting energy, pickup amounts, and drop chance
 - [ ] Wave scaling values and constraints
 
 ### Stretch Goals (Post-MVP)
