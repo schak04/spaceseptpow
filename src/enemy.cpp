@@ -3,6 +3,8 @@
 
 #include "enemy.hpp"
 
+#include <algorithm>
+
 RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
 SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
 EnergyPickup energyPickups[MAX_ENERGY_PICKUPS];
@@ -10,21 +12,35 @@ Texture2D regularEnemyTexture;
 Texture2D specialEnemyTexture;
 
 float regularEnemySpawnTimer = 0.0f;
-const float regularEnemySpawnInterval = 1.0f;
-const float regularEnemySpeed = 100.0f;
+float regularEnemySpawnInterval = 1.0f;
+float regularEnemySpeed = 100.0f;
 float specialEnemySpawnTimer = 0.0f;
-const float specialEnemySpawnInterval = 2.5f;
-const float specialEnemySpeed = 120.0f;
+float specialEnemySpawnInterval = 2.5f;
+float specialEnemySpeed = 120.0f;
+int regularEnemyHP = REGULAR_ENEMY_HP;
+int specialEnemyHP = SPECIAL_ENEMY_HP;
 int regularEnemiesToSpawn = 0;
 int specialEnemiesToSpawn = 0;
 int regularEnemiesToDefeat = 0;
 int specialEnemiesToDefeat = 0;
 
-void startWave() {
-    regularEnemiesToSpawn = 12;
-    specialEnemiesToSpawn = 3;
+void startWave(int waveNumber) {
+    const int countSteps = std::min((waveNumber - 1) / 2, 6);
+    const int specialCountSteps = std::min((waveNumber - 1) / 4, 3);
+    const int speedSteps = std::min((waveNumber - 1) / 2, 8);
+    const int hitPointSteps = std::min((waveNumber - 1) / 4, 4);
+    const int spawnRateSteps = std::min((waveNumber - 1) / 2, 10);
+
+    regularEnemiesToSpawn = 12 + countSteps * 2;
+    specialEnemiesToSpawn = 3 + specialCountSteps;
     regularEnemiesToDefeat = regularEnemiesToSpawn;
     specialEnemiesToDefeat = specialEnemiesToSpawn;
+    regularEnemySpeed = 100.0f * (1.0f + speedSteps * 0.05f);
+    specialEnemySpeed = 120.0f * (1.0f + speedSteps * 0.05f);
+    regularEnemySpawnInterval = std::max(0.5f, 1.0f - spawnRateSteps * 0.05f);
+    specialEnemySpawnInterval = std::max(1.5f, 2.5f - spawnRateSteps * 0.1f);
+    regularEnemyHP = REGULAR_ENEMY_HP + hitPointSteps * 25;
+    specialEnemyHP = SPECIAL_ENEMY_HP + hitPointSteps * 50;
     regularEnemySpawnTimer = 0.0f;
     specialEnemySpawnTimer = 0.0f;
 }
@@ -109,7 +125,7 @@ void spawnRegularEnemies() {
             // and same with HP
 
             // pos represents the center
-            enemy.HP = REGULAR_ENEMY_HP;
+            enemy.HP = regularEnemyHP;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
@@ -135,7 +151,7 @@ void spawnSpecialEnemies() {
     for (SpecialEnemy& enemy : specialEnemies) {
         if (!enemy.active) {
             enemy.active = true;
-            enemy.HP = SPECIAL_ENEMY_HP;
+            enemy.HP = specialEnemyHP;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;

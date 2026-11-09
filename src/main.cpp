@@ -39,7 +39,7 @@ int main() {
         if (gameState == GameState::Start && IsKeyPressed(KEY_ENTER)) {
             gameState = GameState::Playing;
             currentWave = 1;
-            startWave();
+            startWave(currentWave);
         } else if (gameState == GameState::GameOver && IsKeyPressed(KEY_ENTER)) {
             Texture2D playerTexture = player.texture;
             player = Player{};
@@ -48,7 +48,7 @@ int main() {
             resetProjectiles();
             currentWave = 1;
             waveIntermission = false;
-            startWave();
+            startWave(currentWave);
             gameState = GameState::Playing;
         }
 
@@ -59,7 +59,7 @@ int main() {
                 if (waveIntermissionTimer <= 0.0f) {
                     waveIntermission = false;
                     currentWave++;
-                    startWave();
+                    startWave(currentWave);
                 }
             } else {
                 movePlayer();

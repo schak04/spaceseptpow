@@ -49,7 +49,7 @@ void moveSpecialEnemies();
 void drawSpecialEnemies();
 void drawEnergyPickups();
 void resetEnemies();
-void startWave();
+void startWave(int waveNumber);
 bool isWaveComplete();
 void registerRegularEnemyDefeat();
 void registerSpecialEnemyDefeat();
