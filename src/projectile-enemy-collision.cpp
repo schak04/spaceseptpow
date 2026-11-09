@@ -1,6 +1,7 @@
 #include "projectile-enemy-collision.hpp"
 
 #include "enemy.hpp"
+#include "player.hpp"
 #include "projectile.hpp"
 
 void detectProjectileEnemyCollision() {
@@ -49,6 +50,7 @@ void detectProjectileEnemyCollision() {
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
+                    player.score += REGULAR_ENEMY_DEFEAT_POINTS;
                 }
             }
         }
@@ -81,6 +83,7 @@ void detectProjectileEnemyCollision() {
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
+                    player.score += SPECIAL_ENEMY_DEFEAT_POINTS;
 
                     if (GetRandomValue(0, 999) < (int)(enemy.eneryDropChance * 1000.0f)) {
                         for (EnergyPickup& pickup : energyPickups) {

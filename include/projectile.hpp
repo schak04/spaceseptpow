@@ -6,6 +6,8 @@
 
 #define MAX_PROJECTILES 100
 #define PROJECTILE_IMPACT 50
+#define REGULAR_ENEMY_DEFEAT_POINTS 5
+#define SPECIAL_ENEMY_DEFEAT_POINTS 10
 
 struct Projectile {
     Vector2 pos = {0.0f, 0.0f};

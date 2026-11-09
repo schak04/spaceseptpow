@@ -10,6 +10,7 @@
 
 struct Player {
     int HP = PLAYER_HP;
+    unsigned score = 0;
     Texture2D texture;
     Vector2 pos = {(float)SCREEN_WIDTH * (1.0f / 2.0f), (float)SCREEN_HEIGHT * (94.0f / 100.0f)};
     Vector2 dimensions = {80, 80};
