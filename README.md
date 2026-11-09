@@ -35,7 +35,7 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 - **Movement:** 8 directions with inertia as the primary mechanic. Input provides acceleration, drag dampens speed, and position updates from velocity and delta time. Must feel responsive, not floaty.
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
 - **Energy (HP):** Fixed starting pool. Enemy contact drains it; reaching zero triggers Game Over.
-- **Pickups:** Special enemies can drop energy pickups. Flying into one restores a portion of HP.
+- **Pickups:** Special enemies can drop energy pickups, but only through projectile-inflicted damage (not player-enemy collision). Flying into one restores a portion of HP.
 - **Waves:** Clearing all active enemies triggers the next wave. Difficulty scales through enemy count, speed, HP, spawn rate, and special enemy frequency without introducing new mechanics.
 - **Score:** Points awarded per kill, with higher payouts for special enemies. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over. Waves run strictly inside Playing.
