@@ -95,4 +95,14 @@ void detectPlayerEnemyCollision() {
             }
         }
     }
+
+    for (EnergyPickup& pickup : energyPickups) {
+        if (!pickup.active) continue;
+
+        if (CheckCollisionCircleRec(pickup.pos, pickup.radius, playerRec)) {
+            player.HP += PICKUP_AMOUNT;
+            if (player.HP > PLAYER_HP) player.HP = PLAYER_HP;
+            pickup.active = false;
+        }
+    }
 }

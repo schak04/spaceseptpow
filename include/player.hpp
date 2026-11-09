@@ -5,7 +5,8 @@
 #include "constants.hpp"
 
 #define PLAYER_HP 500
-#define ENEMY_IMPACT 50  // on collision
+#define ENEMY_IMPACT 50    // on collision
+#define PICKUP_AMOUNT 100  // on pickup collection
 
 struct Player {
     int HP = PLAYER_HP;
