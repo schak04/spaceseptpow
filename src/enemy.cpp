@@ -256,10 +256,23 @@ void drawSpecialEnemies() {
     }
 }
 
+// energy pickups
+
 void drawEnergyPickups() {
     for (const EnergyPickup& pickup : energyPickups) {
         if (pickup.active) {
             DrawCircleV(pickup.pos, pickup.radius, BLUE);
         }
+    }
+}
+
+void updateEnergyPickups() {
+    const float dt = GetFrameTime();
+
+    for (EnergyPickup& pickup : energyPickups) {
+        if (!pickup.active) continue;
+
+        pickup.timeRemaining -= dt;
+        if (pickup.timeRemaining <= 0.0f) pickup.active = false;
     }
 }

@@ -92,6 +92,7 @@ void detectProjectileEnemyCollision() {
                         for (EnergyPickup& pickup : energyPickups) {
                             if (!pickup.active) {
                                 pickup.pos = enemy.pos;
+                                pickup.timeRemaining = 2.0f;
                                 pickup.active = true;
                                 break;
                             }

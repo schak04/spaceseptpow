@@ -32,6 +32,7 @@ struct SpecialEnemy {
 struct EnergyPickup {
     Vector2 pos = {0.0f, 0.0f};
     float radius = 10.0f;
+    float timeRemaining = 5.0f;
     bool active = false;
 };
 
@@ -48,6 +49,7 @@ void spawnSpecialEnemies();
 void moveSpecialEnemies();
 void drawSpecialEnemies();
 void drawEnergyPickups();
+void updateEnergyPickups();
 void resetEnemies();
 void startWave(int waveNumber);
 bool isWaveComplete();

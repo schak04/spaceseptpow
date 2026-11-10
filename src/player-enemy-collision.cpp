@@ -98,6 +98,7 @@ void detectPlayerEnemyCollision() {
         }
     }
 
+    // pickup collection
     for (EnergyPickup& pickup : energyPickups) {
         if (!pickup.active) continue;
 

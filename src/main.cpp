@@ -67,6 +67,7 @@ int main() {
                 spawnSpecialEnemies();
                 moveRegularEnemies();
                 moveSpecialEnemies();
+                updateEnergyPickups();
                 moveProjectiles();
                 detectProjectileEnemyCollision();
                 detectPlayerEnemyCollision();
@@ -108,13 +109,13 @@ int main() {
                     BLUE);
             }
         } else if (gameState == GameState::Start) {
-            drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, WHITE);
-            drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, LIGHTGRAY);
+            drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);
+            drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, GOLD);
         } else {
-            drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, WHITE);
+            drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, ORANGE);
             drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
                              LIGHTGRAY);
-            drawCenteredText("Press ENTER to restart", SCREEN_HEIGHT / 2 + 40, 24, LIGHTGRAY);
+            drawCenteredText("Press ENTER to restart", SCREEN_HEIGHT / 2 + 40, 24, GOLD);
         }
 
         EndDrawing();
