@@ -90,15 +90,22 @@ int main() {
             drawRegularEnemies();
             drawSpecialEnemies();
             drawEnergyPickups();
-            DrawText(TextFormat("HP: %d", player.HP), 20, 20, 24, WHITE);
+            DrawRectangle(20, 20, 200, 16, DARKGRAY);
+            if (player.HP >= PLAYER_HP / 1.4) {
+                DrawRectangle(20, 20, (int)(200.0f * player.HP / PLAYER_HP), 16, GREEN);
+            } else if (player.HP >= PLAYER_HP / 2) {
+                DrawRectangle(20, 20, (int)(200.0f * player.HP / PLAYER_HP), 16, ORANGE);
+            } else {
+                DrawRectangle(20, 20, (int)(200.0f * player.HP / PLAYER_HP), 16, RED);
+            }
             DrawText(TextFormat("Score: %u", player.score), 20, 50, 24, WHITE);
-            DrawText(TextFormat("Wave: %d", currentWave), 20, 80, 24, WHITE);
+            DrawText(TextFormat("Wave: %d", currentWave), 20, 80, 24, SKYBLUE);
             if (waveIntermission) {
                 drawCenteredText("Wave cleared. Look alive, pilot. They're grouping up again.", 120,
                                  24, YELLOW);
                 drawCenteredText(
                     TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,
-                    YELLOW);
+                    BLUE);
             }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, WHITE);
