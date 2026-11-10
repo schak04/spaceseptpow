@@ -126,6 +126,7 @@ void spawnRegularEnemies() {
 
             // pos represents the center
             enemy.HP = regularEnemyHP;
+            enemy.lastDamageTakenTime = -1.0f;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
@@ -152,6 +153,7 @@ void spawnSpecialEnemies() {
         if (!enemy.active) {
             enemy.active = true;
             enemy.HP = specialEnemyHP;
+            enemy.lastDamageTakenTime = -1.0f;
             enemy.pos.x = (float)GetRandomValue((int)(enemy.dimensions.x / 2),
                                                 SCREEN_WIDTH - (int)(enemy.dimensions.x / 2.0f));
             enemy.pos.y = -enemy.dimensions.y / 2.0f;
@@ -238,6 +240,15 @@ void drawRegularEnemies() {
             float rotation = 180.0f;
 
             DrawTexturePro(regularEnemyTexture, srcRect, destRect, origin, rotation, WHITE);
+            if (enemy.lastDamageTakenTime >= 0.0f && GetTime() - enemy.lastDamageTakenTime <= 1.0) {
+                const int barWidth = 30;
+                const int barHeight = 4;
+                const int barX = (int)(enemy.pos.x - barWidth / 2.0f);
+                const int barY = (int)(enemy.pos.y - enemy.dimensions.y / 2.0f - barHeight - 4.0f);
+                DrawRectangle(barX, barY, barWidth, barHeight, DARKGRAY);
+                DrawRectangle(barX, barY, (int)(barWidth * (float)enemy.HP / regularEnemyHP),
+                              barHeight, RED);
+            }
         }
     }
 }
@@ -252,6 +263,15 @@ void drawSpecialEnemies() {
             float rotation = 180.0f;
 
             DrawTexturePro(specialEnemyTexture, srcRect, destRect, origin, rotation, WHITE);
+            if (enemy.lastDamageTakenTime >= 0.0f && GetTime() - enemy.lastDamageTakenTime <= 1.0) {
+                const int barWidth = 30;
+                const int barHeight = 4;
+                const int barX = (int)(enemy.pos.x - barWidth / 2.0f);
+                const int barY = (int)(enemy.pos.y - enemy.dimensions.y / 2.0f - barHeight - 4.0f);
+                DrawRectangle(barX, barY, barWidth, barHeight, DARKGRAY);
+                DrawRectangle(barX, barY, (int)(barWidth * (float)enemy.HP / specialEnemyHP),
+                              barHeight, RED);
+            }
         }
     }
 }

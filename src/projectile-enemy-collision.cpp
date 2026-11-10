@@ -47,6 +47,7 @@ void detectProjectileEnemyCollision() {
             if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
                 projectile.active = false;
                 enemy.HP -= PROJECTILE_IMPACT;
+                enemy.lastDamageTakenTime = (float)GetTime();
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;
@@ -82,6 +83,7 @@ void detectProjectileEnemyCollision() {
             if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
                 projectile.active = false;
                 enemy.HP -= PROJECTILE_IMPACT;
+                enemy.lastDamageTakenTime = (float)GetTime();
 
                 if (enemy.HP <= 0) {
                     enemy.active = false;

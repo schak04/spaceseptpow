@@ -12,6 +12,7 @@
 
 struct RegularEnemy {
     int HP = REGULAR_ENEMY_HP;
+    float lastDamageTakenTime = -1.0f;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};
@@ -20,6 +21,7 @@ struct RegularEnemy {
 
 struct SpecialEnemy {
     int HP = SPECIAL_ENEMY_HP;
+    float lastDamageTakenTime = -1.0f;
     Vector2 pos = {0.0f, 0.0f};
     Vector2 dimensions = {100, 100};
     Vector2 velocity = {0.0f, 0.0f};
