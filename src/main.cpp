@@ -34,8 +34,20 @@ int main() {
     int currentWave = 0;
     bool waveIntermission = false;
     float waveIntermissionTimer = 0.0f;
+    bool paused = false;
+    float escapeHoldTimer = 0.0f;
+    bool shouldQuit = false;
 
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && !shouldQuit) {
+        if (gameState == GameState::Playing && IsKeyPressed(KEY_ESCAPE)) paused = !paused;
+
+        if (gameState == GameState::Playing && IsKeyDown(KEY_ESCAPE)) {
+            escapeHoldTimer += GetFrameTime();
+            if (escapeHoldTimer >= 1.5f) shouldQuit = true;
+        } else {
+            escapeHoldTimer = 0.0f;
+        }
+
         if (gameState == GameState::Start && IsKeyPressed(KEY_ENTER)) {
             gameState = GameState::Playing;
             currentWave = 1;
@@ -52,9 +64,10 @@ int main() {
             gameState = GameState::Playing;
         }
 
-        if (gameState == GameState::Playing) {
+        if (gameState == GameState::Playing && !paused && escapeHoldTimer == 0.0f && !shouldQuit) {
+            // skipping gameplay updates to keep the cleared arena still
+            // during the next-wave-starting warning
             if (waveIntermission) {
-                // skipping gameplay updates to keep the cleared arena still during the warning
                 waveIntermissionTimer -= GetFrameTime();
                 if (waveIntermissionTimer <= 0.0f) {
                     waveIntermission = false;
@@ -107,6 +120,11 @@ int main() {
                 drawCenteredText(
                     TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,
                     BLUE);
+            }
+            if (paused) drawCenteredText("Be back soon, pilot.", SCREEN_HEIGHT / 2, 32, YELLOW);
+            if (escapeHoldTimer > 0.0f) {
+                const char* message = "Quitting game...";
+                DrawText(message, SCREEN_WIDTH - MeasureText(message, 20) - 20, 20, 20, LIGHTGRAY);
             }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);

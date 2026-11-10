@@ -25,17 +25,19 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 ### Controls
 
-| Input             | Action |
-| ----------------- | ------ |
-| WASD / Arrow Keys | Move   |
-| Space             | Shoot  |
+| Input             | Action          |
+| ----------------- | --------------- |
+| WASD / Arrow Keys | Move            |
+| Space             | Shoot           |
+| Escape            | Pause or resume |
+| Hold Escape       | Quit the game   |
 
 ### Rules and Mechanics
 
 - **Movement:** 8 directions with inertia as the primary mechanic. Input provides acceleration, drag dampens speed, and position updates from velocity and delta time. Must feel responsive, not floaty.
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
 - **Energy (HP):** Fixed starting pool. Enemy contact drains it; reaching zero triggers Game Over.
-- **Pickups:** Special enemies can drop energy pickups, but only through projectile-inflicted damage (not player-enemy collision). Flying into one restores a portion of HP. They expire in 2 seconds, so the player must be quick at picking them up.
+- **Pickups:** Special enemies can drop energy pickups, but only through projectile-inflicted damage (not player-enemy collision). Flying into one restores a portion of HP. Uncollected pickups expire after two seconds.
 - **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Enemies that leave the arena or hit the player are replaced and do not count as defeats, so only destroying the full wave clears it. Clearing a wave pauses gameplay for a four-second warning before the next wave. Difficulty increases deterministically with these caps: every two waves add 2 regular enemies (up to 24), increase enemy speed by 5% (up to 40%), and shorten spawn intervals by 0.05 seconds for regular enemies and 0.1 seconds for special enemies (floors of 0.5 and 1.5 seconds); every four waves add 1 special enemy (up to 6) and increase regular and special HP by 25 and 50 respectively (up to double their base HP). The values stop increasing once their caps are reached.
 - **Score:** Points awarded per kill, with higher payouts for special enemies. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over. Waves run strictly inside Playing.
@@ -51,9 +53,10 @@ Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
 ### UI
 
-- **HUD:** Energy, score, wave counter, and next-wave warning with a countdown during the pause
+- **HUD:** HP bar, score, wave counter, and next-wave warning with a countdown during the pause. The warning appears below the wave-cleared message.
+- **Pause and quit:** Press `Escape` to pause or resume gameplay. Holding `Escape` for 1.5 seconds quits; a message appears at the top right while the key is held. The wave countdown also pauses.
 - **Start screen:** Title, controls, and start prompt
-- **Game Over screen:** Final score, highest wave, restart prompt, and random one-liner flavour text
+- **Game Over screen:** Final score, highest wave, restart prompt, and random one-liner flavour text (yet to implement the flavour texts)
 
 ---
 
