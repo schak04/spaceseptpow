@@ -38,7 +38,7 @@ int main() {
     float escapeHoldTimer = 0.0f;
     bool shouldQuit = false;
 
-    while (!WindowShouldClose() && !shouldQuit) {
+    while (!shouldQuit) {
         if (gameState == GameState::Playing && IsKeyPressed(KEY_ESCAPE)) paused = !paused;
 
         if (gameState == GameState::Playing && IsKeyDown(KEY_ESCAPE)) {
