@@ -41,7 +41,7 @@ int main() {
     while (!shouldQuit) {
         if (gameState == GameState::Playing && IsKeyPressed(KEY_ESCAPE)) paused = !paused;
 
-        if (gameState == GameState::Playing && IsKeyDown(KEY_ESCAPE)) {
+        if (IsKeyDown(KEY_ESCAPE)) {
             escapeHoldTimer += GetFrameTime();
             if (escapeHoldTimer >= 1.5f) shouldQuit = true;
         } else {
@@ -121,10 +121,9 @@ int main() {
                     TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,
                     BLUE);
             }
-            if (paused) drawCenteredText("Be back soon, pilot.", SCREEN_HEIGHT / 2, 32, YELLOW);
-            if (escapeHoldTimer > 0.0f) {
-                const char* message = "Quitting game...";
-                DrawText(message, SCREEN_WIDTH - MeasureText(message, 20) - 20, 20, 20, LIGHTGRAY);
+            if (paused) {
+                drawCenteredText("Game Paused", (SCREEN_HEIGHT / 2) - 34, 32, YELLOW);
+                drawCenteredText("Be back soon, pilot.", SCREEN_HEIGHT / 2, 28, BLUE);
             }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);
@@ -134,6 +133,11 @@ int main() {
             drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
                              LIGHTGRAY);
             drawCenteredText("Press ENTER to restart", SCREEN_HEIGHT / 2 + 40, 24, GOLD);
+        }
+
+        if (escapeHoldTimer > 0.0f) {
+            const char* message = "Quitting game...";
+            DrawText(message, SCREEN_WIDTH - MeasureText(message, 20) - 20, 20, 20, LIGHTGRAY);
         }
 
         EndDrawing();
