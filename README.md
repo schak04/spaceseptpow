@@ -1,8 +1,8 @@
 # SpaceSept Pow!
 
-This project is a 2D top-down space shooter game that I'm writing in C++ using raylib. This is, in fact, my first raylib project.
+This project is a 2D top-down space shooter game that I'm writing in C++ using raylib.
 
-- **Platform:** Linux native first, macOS/Windows later. Steam deck support intended once the initial version is complete.
+- **Platform:** Linux native. macOS, Windows, and Steam deck support is planned once the initial version is complete.
 - **Arena:** One fixed screen, 1280x720
 - **Players:** Single player
 
@@ -36,27 +36,28 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 - **Movement:** 8 directions with inertia as the primary mechanic. Input provides acceleration, drag dampens speed, and position updates from velocity and delta time. Must feel responsive, not floaty.
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
-- **Energy (HP):** Fixed starting pool. Enemy contact drains it; reaching zero triggers Game Over.
-- **Pickups:** Special enemies can drop energy pickups, but only through projectile-inflicted damage (not player-enemy collision). Flying into one restores a portion of HP. Uncollected pickups expire after two seconds.
-- **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Enemies that leave the arena or hit the player are replaced and do not count as defeats, so only destroying the full wave clears it. Clearing a wave pauses gameplay for a four-second warning before the next wave. Difficulty increases deterministically with these caps: every two waves add 2 regular enemies (up to 24), increase enemy speed by 5% (up to 40%), and shorten spawn intervals by 0.05 seconds for regular enemies and 0.1 seconds for special enemies (floors of 0.5 and 1.5 seconds); every four waves add 1 special enemy (up to 6) and increase regular and special HP by 25 and 50 respectively (up to double their base HP). The values stop increasing once their caps are reached.
-- **Score:** Points awarded per kill, with higher payouts for special enemies. No win condition: survive as long as possible.
+- **Energy (HP):** Starts at 500 HP. Enemy contact deals 50 damage; reaching zero triggers Game Over.
+- **Pickups:** Special enemies have a 50% chance to drop an energy pickup when destroyed by a projectile. Player-enemy collision does not cause drops. Collecting a pickup restores 100 HP, up to the 500 HP maximum. Uncollected pickups expire after two seconds.
+- **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Enemies that leave the arena are replaced and do not count as defeats. Enemy contact also replaces the enemy without counting as a defeat, but deals player damage. The wave clears only after all required defeats are made and no enemies remain active. Gameplay pauses for a four-second warning before the next wave.
+- **Wave scaling:** Scaling is deterministic and based on the wave number. Every two waves, regular enemy count increases by 2 (maximum 24), enemy speed increases by 5% (maximum 40% above base), and spawn intervals decrease by 0.05 seconds for regular enemies and 0.1 seconds for special enemies (floors of 0.5 and 1.5 seconds). Every four waves, special enemy count increases by 1 (maximum 6), and regular and special HP increase by 25 and 50 (maximum 200 and 400 HP, twice base). The caps are reached at wave 13 for regular and special enemy counts, wave 17 for HP and speed, and wave 21 for spawn intervals. Values remain at their caps thereafter.
+- **Score:** Destroying a regular enemy awards 5 points; destroying a special enemy awards 10 points. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over. Waves run strictly inside Playing.
 
 ### Enemies
 
-| Type    | Behaviour                                                             | HP     | Score  | Drops Energy       |
-| ------- | --------------------------------------------------------------------- | ------ | ------ | ------------------ |
-| Regular | Spawns at arena edge, moves vertically straight, deals contact damage | Low    | Low    | No                 |
-| Special | Similar to regular with random zig-zag motion, deals contact damage   | Higher | Higher | Yes (chance based) |
+| Type    | Behaviour                                                                  | HP       | Score | Drops Energy     |
+| ------- | -------------------------------------------------------------------------- | -------- | ----- | ---------------- |
+| Regular | Spawns at arena edge, moves vertically straight, deals contact damage      | 100 base | 5     | No               |
+| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage | 200 base | 10    | Yes (50% chance) |
 
-Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
+Regular enemies have 100 base HP and special enemies have 200 base HP. Both take 50 damage per projectile hit. Their HP bars appear for one second after taking damage. Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 
 ### UI
 
 - **HUD:** HP bar, score, wave counter, and next-wave warning with a countdown during the pause. The warning appears below the wave-cleared message.
 - **Pause and quit:** Press `Escape` to pause or resume gameplay. Holding `Escape` for 1.5 seconds quits; a message appears at the top right while the key is held. The wave countdown also pauses.
 - **Start screen:** Title, controls, and start prompt
-- **Game Over screen:** Final score, highest wave, restart prompt, and random one-liner flavour text (yet to implement the flavour texts)
+- **Game Over screen:** Final score and restart prompt. Highest wave and flavour text are not currently displayed.
 
 ---
 
@@ -67,7 +68,7 @@ Enemies deal contact damage only in v1 (no pathfinding or enemy projectiles).
 Parameters to dial in during playtesting:
 
 - [x] Starting energy, pickup amounts, and drop chance
-- [ ] Wave scaling values and constraints
+- [x] Wave scaling values and constraints
 
 ### Stretch Goals (Post-MVP)
 
@@ -77,7 +78,7 @@ Sound effects, starfield background, simple boss, ranged-attacking enemy, persis
 
 ## Credits and References
 
-### Assets and Credits
+### Assets
 
 - **Spaceships:** [FREE Spaceships Vol. 1](https://gisha.itch.io/spaceships-asset-pack) by [gishadev](https://itch.io/profile/gisha), licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
