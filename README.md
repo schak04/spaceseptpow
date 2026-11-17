@@ -91,6 +91,10 @@ Sound effects, starfield background, simple boss, ranged-attacking enemy, persis
 - https://www.gafferongames.com/post/spring_physics
 - https://mathworld.wolfram.com/ExponentialDecay.html
 
+### Tools
+
+**Aseprite** and **ImageMagick** to analyse and inspect sprites.
+
 ---
 
 ## Author

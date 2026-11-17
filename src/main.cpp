@@ -10,6 +10,8 @@
 #include "projectile-enemy-collision.hpp"
 #include "projectile.hpp"
 
+Texture2D background;
+
 enum class GameState { Start, Playing, GameOver };
 
 void drawCenteredText(const char* text, int y, int fontSize, Color color) {
@@ -19,6 +21,9 @@ void drawCenteredText(const char* text, int y, int fontSize, Color color) {
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
+
+    // background
+    background = LoadTexture("assets/background/space-parallax.png");
 
     // change the starting state of the random number generator used by GetRandomValue()
     // so it's truly random
@@ -39,6 +44,16 @@ int main() {
     bool shouldQuit = false;
 
     while (!shouldQuit) {
+        // background drawing
+        Rectangle backgroundSrcRect = {0.0f, 0.0f, (float)background.width,
+                                       (float)background.height};
+        Rectangle backgroundDestRect = {0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT};
+        Vector2 backgroundOrigin = {0.0f, 0.0f};
+
+        if (gameState == GameState::Playing)
+            DrawTexturePro(background, backgroundSrcRect, backgroundDestRect, backgroundOrigin,
+                           0.0f, WHITE);
+
         if (gameState == GameState::Playing && IsKeyPressed(KEY_ESCAPE)) paused = !paused;
 
         if (IsKeyDown(KEY_ESCAPE)) {
@@ -146,6 +161,7 @@ int main() {
     UnloadTexture(player.texture);
     UnloadTexture(regularEnemyTexture);
     UnloadTexture(specialEnemyTexture);
+    UnloadTexture(background);
     CloseWindow();
 
     return 0;
