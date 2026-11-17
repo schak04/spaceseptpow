@@ -81,6 +81,7 @@ Sound effects, starfield background, simple boss, ranged-attacking enemy, persis
 ### Assets
 
 - **Spaceships:** [FREE Spaceships Vol. 1](https://gisha.itch.io/spaceships-asset-pack) by [gishadev](https://itch.io/profile/gisha), licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
+- **Background:** [Space Parallax Background](https://opengameart.org/content/space-parallax-background)
 
 ### References
 
