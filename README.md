@@ -38,17 +38,18 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 - **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
 - **Health (HP):** Starts at 500 HP. Enemy contact deals 50 damage; reaching zero triggers Game Over.
 - **Pickups:** Special enemies have a 50% chance to drop an energy pickup when destroyed by a projectile. Player-enemy collision does not cause drops. Collecting a pickup restores 100 HP, up to the 500 HP maximum. Uncollected pickups expire after two seconds.
-- **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Enemies that leave the arena are replaced and do not count as defeats. Enemy contact also replaces the enemy without counting as a defeat, but deals player damage. The wave clears only after all required defeats are made and no enemies remain active. Gameplay pauses for a four-second warning before the next wave.
+- **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Every fifth wave is a boss fight and does not spawn regular or special enemies. Enemies that leave the arena are replaced and do not count as defeats. Enemy contact also replaces the enemy without counting as a defeat, but deals player damage. The wave clears only after all required defeats are made and no enemies remain active. Gameplay pauses for a four-second warning before the next wave.
 - **Wave scaling:** Scaling is deterministic and based on the wave number. Every two waves, regular enemy count increases by 2 (maximum 24), enemy speed increases by 5% (maximum 40% above base), and spawn intervals decrease by 0.05 seconds for regular enemies and 0.1 seconds for special enemies (floors of 0.5 and 1.5 seconds). Every four waves, special enemy count increases by 1 (maximum 6), and regular and special HP increase by 25 and 50 (maximum 200 and 400 HP, twice base). The caps are reached at wave 13 for regular and special enemy counts, wave 17 for HP and speed, and wave 21 for spawn intervals. Values remain at their caps thereafter.
-- **Score:** Destroying a regular enemy awards 5 points; destroying a special enemy awards 10 points. No win condition: survive as long as possible.
+- **Score:** Destroying a regular enemy awards 5 points, a special enemy awards 10 points, and a boss awards 100 points. No win condition: survive as long as possible.
 - **States:** Start, Playing, and Game Over.
 
 ### Enemies
 
-| Type    | Behaviour                                                                  | HP       | Score | Drops Energy     |
-| ------- | -------------------------------------------------------------------------- | -------- | ----- | ---------------- |
-| Regular | Spawns at arena edge, moves vertically straight, deals contact damage      | 100 base | 5     | No               |
-| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage | 200 base | 10    | Yes (50% chance) |
+| Type    | Behaviour                                                                      | HP        | Score | Drops Energy     |
+| ------- | ------------------------------------------------------------------------------ | --------- | ----- | ---------------- |
+| Regular | Spawns at arena edge, moves vertically straight, deals contact damage          | 100 base  | 5     | No               |
+| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage   | 200 base  | 10    | Yes (50% chance) |
+| Boss    | Large, stationary ship that fires aimed projectiles                           | 4000      | 100   | No               |
 
 Their HP bars appear for one second after taking damage. Enemies deal contact damage only in v1.
 
@@ -72,7 +73,7 @@ Parameters to dial in during playtesting:
 
 ### Stretch Goals (Post-MVP)
 
-Sound effects, starfield background, simple boss, ranged-attacking enemy, persistent high score, gamepad support, and a Steam Deck build.
+Sound effects, starfield background, persistent high score, gamepad support, and a Steam Deck build.
 
 ---
 
