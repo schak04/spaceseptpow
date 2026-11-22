@@ -105,4 +105,38 @@ void detectProjectileEnemyCollision() {
             }
         }
     }
+
+    if (bossEnemy.active) {
+        // NOTE:
+        // The boss texture is 500 x 500 but the actual visible enemy occupies:
+        // X: 63 to 436 and Y: 110 to 389
+        // the texture is drawn with a 180 degree rotation which flips the visible bounds
+
+        const float visibleLeft = 63.0f;
+        const float visibleRight = 437.0f;
+        const float visibleTop = 110.0f;
+        const float visibleBottom = 390.0f;
+
+        Rectangle bossRec = {
+            bossEnemy.pos.x - bossEnemy.dimensions.x / 2.0f +
+                (bossEnemyTexture.width - visibleRight) / bossEnemyTexture.width *
+                    bossEnemy.dimensions.x,
+            bossEnemy.pos.y - bossEnemy.dimensions.y / 2.0f +
+                (bossEnemyTexture.height - visibleBottom) / bossEnemyTexture.height *
+                    bossEnemy.dimensions.y,
+            (visibleRight - visibleLeft) / bossEnemyTexture.width * bossEnemy.dimensions.x,
+            (visibleBottom - visibleTop) / bossEnemyTexture.height * bossEnemy.dimensions.y};
+        for (Projectile& projectile : projectiles) {
+            if (!projectile.active || !CheckCollisionPointRec(projectile.pos, bossRec)) continue;
+
+            projectile.active = false;
+            bossEnemy.HP -= PROJECTILE_IMPACT;
+            bossEnemy.lastDamageTakenTime = (float)GetTime();
+            if (bossEnemy.HP <= 0) {
+                bossEnemy.active = false;
+                player.score += BOSS_ENEMY_DEFEAT_POINTS;
+                break;
+            }
+        }
+    }
 }

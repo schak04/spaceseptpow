@@ -8,6 +8,7 @@
 #define MAX_SPECIAL_ENEMIES 20
 #define REGULAR_ENEMY_HP 100
 #define SPECIAL_ENEMY_HP 200
+#define BOSS_ENEMY_HP 4000
 #define MAX_ENERGY_PICKUPS MAX_SPECIAL_ENEMIES
 
 struct RegularEnemy {
@@ -38,11 +39,22 @@ struct EnergyPickup {
     bool active = false;
 };
 
+struct BossEnemy {
+    int HP = BOSS_ENEMY_HP;
+    float lastDamageTakenTime = -1.0f;
+    Vector2 pos = {0.0f, 0.0f};
+    Vector2 dimensions = {300.0f, 300.0f};
+    float projectileTimer = 0.0f;
+    bool active = false;
+};
+
 extern RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
 extern SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
 extern EnergyPickup energyPickups[MAX_ENERGY_PICKUPS];
 extern Texture2D regularEnemyTexture;
 extern Texture2D specialEnemyTexture;
+extern Texture2D bossEnemyTexture;
+extern BossEnemy bossEnemy;
 
 void spawnRegularEnemies();
 void moveRegularEnemies();
@@ -51,6 +63,8 @@ void spawnSpecialEnemies();
 void moveSpecialEnemies();
 void drawSpecialEnemies();
 void drawEnergyPickups();
+void updateBossEnemy();
+void drawBossEnemy();
 void updateEnergyPickups();
 void resetEnemies();
 void startWave(int waveNumber);

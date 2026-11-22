@@ -34,6 +34,7 @@ int main() {
 
     regularEnemyTexture = LoadTexture("assets/enemies/regular/regular-enemy-spaceship.png");
     specialEnemyTexture = LoadTexture("assets/enemies/special/special-enemy-spaceship.png");
+    bossEnemyTexture = LoadTexture("assets/enemies/boss/boss-enemy-spaceship.png");
 
     GameState gameState = GameState::Start;
     int currentWave = 0;
@@ -95,6 +96,7 @@ int main() {
                 spawnSpecialEnemies();
                 moveRegularEnemies();
                 moveSpecialEnemies();
+                updateBossEnemy();
                 updateEnergyPickups();
                 moveProjectiles();
                 detectProjectileEnemyCollision();
@@ -118,6 +120,7 @@ int main() {
             drawPlayer();
             drawRegularEnemies();
             drawSpecialEnemies();
+            drawBossEnemy();
             drawEnergyPickups();
             DrawRectangle(20, 20, 200, 16, DARKGRAY);
             if (player.HP >= PLAYER_HP / 1.4) {
@@ -161,6 +164,7 @@ int main() {
     UnloadTexture(player.texture);
     UnloadTexture(regularEnemyTexture);
     UnloadTexture(specialEnemyTexture);
+    UnloadTexture(bossEnemyTexture);
     UnloadTexture(background);
     CloseWindow();
 

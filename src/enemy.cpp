@@ -4,12 +4,18 @@
 #include "enemy.hpp"
 
 #include <algorithm>
+#include <cmath>
+
+#include "player.hpp"
+#include "projectile.hpp"
 
 RegularEnemy regularEnemies[MAX_REGULAR_ENEMIES];
 SpecialEnemy specialEnemies[MAX_SPECIAL_ENEMIES];
 EnergyPickup energyPickups[MAX_ENERGY_PICKUPS];
 Texture2D regularEnemyTexture;
 Texture2D specialEnemyTexture;
+Texture2D bossEnemyTexture;
+BossEnemy bossEnemy;
 
 float regularEnemySpawnTimer = 0.0f;
 float regularEnemySpawnInterval = 1.0f;
@@ -25,14 +31,21 @@ int regularEnemiesToDefeat = 0;
 int specialEnemiesToDefeat = 0;
 
 void startWave(int waveNumber) {
+    resetBossProjectiles();
+    bossEnemy.active = waveNumber % 5 == 0;
+    bossEnemy.HP = BOSS_ENEMY_HP;
+    bossEnemy.lastDamageTakenTime = -1.0f;
+    bossEnemy.pos = {(float)SCREEN_WIDTH / 2.0f, 170.0f};
+    bossEnemy.projectileTimer = 0.0f;
+
     const int countSteps = std::min((waveNumber - 1) / 2, 6);
     const int specialCountSteps = std::min((waveNumber - 1) / 4, 3);
     const int speedSteps = std::min((waveNumber - 1) / 2, 8);
     const int hitPointSteps = std::min((waveNumber - 1) / 4, 4);
     const int spawnRateSteps = std::min((waveNumber - 1) / 2, 10);
 
-    regularEnemiesToSpawn = 12 + countSteps * 2;
-    specialEnemiesToSpawn = 3 + specialCountSteps;
+    regularEnemiesToSpawn = bossEnemy.active ? 0 : 12 + countSteps * 2;
+    specialEnemiesToSpawn = bossEnemy.active ? 0 : 3 + specialCountSteps;
     regularEnemiesToDefeat = regularEnemiesToSpawn;
     specialEnemiesToDefeat = specialEnemiesToSpawn;
     regularEnemySpeed = 100.0f * (1.0f + speedSteps * 0.05f);
@@ -59,6 +72,8 @@ bool isWaveComplete() {
         if (enemy.active) return false;
     }
 
+    if (bossEnemy.active) return false;
+
     return true;
 }
 
@@ -71,6 +86,8 @@ void queueRegularEnemyReplacement() { regularEnemiesToSpawn++; }
 void queueSpecialEnemyReplacement() { specialEnemiesToSpawn++; }
 
 void resetEnemies() {
+    bossEnemy.active = false;
+
     for (RegularEnemy& enemy : regularEnemies) enemy.active = false;
 
     for (SpecialEnemy& enemy : specialEnemies) {
@@ -87,6 +104,51 @@ void resetEnemies() {
     specialEnemiesToSpawn = 0;
     regularEnemiesToDefeat = 0;
     specialEnemiesToDefeat = 0;
+}
+
+void updateBossEnemy() {
+    if (!bossEnemy.active) return;
+
+    bossEnemy.projectileTimer += GetFrameTime();
+
+    if (bossEnemy.projectileTimer < 1.5f) return;
+
+    bossEnemy.projectileTimer = 0.0f;
+    const float visibleLeft = 63.0f;
+    const float visibleRight = 437.0f;
+    const float visibleBottom = 390.0f;
+
+    // convert the visible bottom-centre from texture coordinates to screen coordinates
+    const Vector2 muzzle = {
+        bossEnemy.pos.x - bossEnemy.dimensions.x / 2.0f +
+            (visibleLeft + visibleRight) / 2.0f / bossEnemyTexture.width * bossEnemy.dimensions.x,
+        bossEnemy.pos.y - bossEnemy.dimensions.y / 2.0f +
+            visibleBottom / bossEnemyTexture.height * bossEnemy.dimensions.y};
+
+    const float dx = player.pos.x + player.dimensions.x / 2.0f - muzzle.x;
+    const float dy = player.pos.y + player.dimensions.y / 2.0f - muzzle.y;
+    const float distance = std::sqrt(dx * dx + dy * dy);
+    const float speed = 350.0f;
+
+    spawnBossProjectile(muzzle, {dx / distance * speed, dy / distance * speed});
+}
+
+void drawBossEnemy() {
+    if (!bossEnemy.active) return;
+
+    Rectangle srcRect = {0.0f, 0.0f, (float)bossEnemyTexture.width, (float)bossEnemyTexture.height};
+    Rectangle destRect = {bossEnemy.pos.x, bossEnemy.pos.y, bossEnemy.dimensions.x,
+                          bossEnemy.dimensions.y};
+    Vector2 origin = {bossEnemy.dimensions.x / 2.0f, bossEnemy.dimensions.y / 2.0f};
+    DrawTexturePro(bossEnemyTexture, srcRect, destRect, origin, 180.0f, WHITE);
+
+    const float visibleTop = 110.0f;
+    const float visibleTopPosition = bossEnemy.pos.y - bossEnemy.dimensions.y / 2.0f +
+                                     visibleTop / bossEnemyTexture.height * bossEnemy.dimensions.y;
+    DrawRectangle((int)(bossEnemy.pos.x - 100.0f), (int)(visibleTopPosition - 18.0f), 200, 8,
+                  DARKGRAY);
+    DrawRectangle((int)(bossEnemy.pos.x - 100.0f), (int)(visibleTopPosition - 18.0f),
+                  (int)(200.0f * bossEnemy.HP / BOSS_ENEMY_HP), 8, RED);
 }
 
 void spawnRegularEnemies() {

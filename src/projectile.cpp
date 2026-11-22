@@ -3,9 +3,26 @@
 #include "player.hpp"
 
 Projectile projectiles[MAX_PROJECTILES];
+BossProjectile bossProjectiles[MAX_BOSS_PROJECTILES];
 
 void resetProjectiles() {
     for (Projectile& projectile : projectiles) projectile.active = false;
+    resetBossProjectiles();
+}
+
+void resetBossProjectiles() {
+    for (BossProjectile& projectile : bossProjectiles) projectile.active = false;
+}
+
+void spawnBossProjectile(Vector2 pos, Vector2 velocity) {
+    for (BossProjectile& projectile : bossProjectiles) {
+        if (!projectile.active) {
+            projectile.pos = pos;
+            projectile.velocity = velocity;
+            projectile.active = true;
+            break;
+        }
+    }
 }
 
 const float projectileSpeed = 2000.0f;
@@ -45,6 +62,19 @@ void moveProjectiles() {  // TODO: separate spawning and updating projectiles la
             projectiles[i].active = false;
         }
     }
+
+    for (BossProjectile& projectile : bossProjectiles) {
+        if (!projectile.active) continue;
+
+        projectile.pos.x += projectile.velocity.x * dt;
+        projectile.pos.y += projectile.velocity.y * dt;
+        if (projectile.pos.y - projectile.radius > (float)SCREEN_HEIGHT ||
+            projectile.pos.y + projectile.radius < 0.0f ||
+            projectile.pos.x - projectile.radius > (float)SCREEN_WIDTH ||
+            projectile.pos.x + projectile.radius < 0.0f) {
+            projectile.active = false;
+        }
+    }
 }
 
 void drawProjectiles() {
@@ -52,5 +82,9 @@ void drawProjectiles() {
         if (projectiles[i].active) {
             DrawCircleV(projectiles[i].pos, projectiles[i].radius, GOLD);
         }
+    }
+
+    for (const BossProjectile& projectile : bossProjectiles) {
+        if (projectile.active) DrawCircleV(projectile.pos, projectile.radius, RED);
     }
 }

@@ -2,6 +2,7 @@
 
 #include "enemy.hpp"
 #include "player.hpp"
+#include "projectile.hpp"
 
 void detectPlayerEnemyCollision() {
     if (player.HP <= 0) return;
@@ -91,6 +92,19 @@ void detectPlayerEnemyCollision() {
             enemy.active = false;
             queueSpecialEnemyReplacement();
 
+            if (player.HP <= 0) {
+                player.active = false;
+                return;
+            }
+        }
+    }
+
+    for (BossProjectile& projectile : bossProjectiles) {
+        if (!projectile.active) continue;
+
+        if (CheckCollisionCircleRec(projectile.pos, projectile.radius, playerRec)) {
+            projectile.active = false;
+            player.HP -= ENEMY_IMPACT;
             if (player.HP <= 0) {
                 player.active = false;
                 return;
