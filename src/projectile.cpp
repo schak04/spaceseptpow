@@ -4,6 +4,7 @@
 
 Projectile projectiles[MAX_PROJECTILES];
 BossProjectile bossProjectiles[MAX_BOSS_PROJECTILES];
+Sound shootingSound;
 
 void resetProjectiles() {
     for (Projectile& projectile : projectiles) projectile.active = false;
@@ -20,6 +21,7 @@ void spawnBossProjectile(Vector2 pos, Vector2 velocity) {
             projectile.pos = pos;
             projectile.velocity = velocity;
             projectile.active = true;
+            PlaySound(shootingSound);
             break;
         }
     }
@@ -38,6 +40,7 @@ void moveProjectiles() {  // TODO: separate spawning and updating projectiles la
                 projectiles[i].pos = {player.pos.x + (player.dimensions.x / 2.0f), player.pos.y};
                 projectiles[i].velocity = {0.0f, -projectileSpeed};
                 projectiles[i].active = true;
+                PlaySound(shootingSound);
                 break;
             }
         }
