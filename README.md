@@ -45,11 +45,11 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 ### Enemies
 
-| Type    | Behaviour                                                                      | HP        | Score | Drops Energy     |
-| ------- | ------------------------------------------------------------------------------ | --------- | ----- | ---------------- |
-| Regular | Spawns at arena edge, moves vertically straight, deals contact damage          | 100 base  | 5     | No               |
-| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage   | 200 base  | 10    | Yes (50% chance) |
-| Boss    | Large, stationary ship that fires aimed projectiles                           | 4000      | 100   | No               |
+| Type    | Behaviour                                                                  | HP       | Score | Drops Energy     |
+| ------- | -------------------------------------------------------------------------- | -------- | ----- | ---------------- |
+| Regular | Spawns at arena edge, moves vertically straight, deals contact damage      | 100 base | 5     | No               |
+| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage | 200 base | 10    | Yes (50% chance) |
+| Boss    | Large, stationary ship that fires aimed projectiles                        | 4000     | 100   | No               |
 
 Their HP bars appear for one second after taking damage. Enemies deal contact damage only in v1.
 
@@ -83,6 +83,13 @@ Sound effects, starfield background, persistent high score, gamepad support, and
 
 - **Spaceships:** [FREE Spaceships Vol. 1](https://gisha.itch.io/spaceships-asset-pack) by [gishadev](https://itch.io/profile/gisha), licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 - **Background:** [Space Parallax Background](https://opengameart.org/content/space-parallax-background)
+- **Sounds:**
+  - [Theme](https://freesound.org/people/PhalanxKing/sounds/848138/)
+  - [Regular Wave](https://freesound.org/people/TERMINEX/sounds/826075/)
+  - [Shooting](https://freesound.org/people/edwardszakal/sounds/592752/)
+  - [Boss Fight](https://freesound.org/people/Sirkoto51/sounds/443128/)
+  - [Wave Cleared](https://freesound.org/people/BloodPixelHero/sounds/572624/)
+  - [Game Over](https://freesound.org/people/AdamWeeden/sounds/157218/)
 
 ### References
 
