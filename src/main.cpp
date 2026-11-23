@@ -4,6 +4,7 @@
 #include <ctime>
 
 #include "constants.hpp"
+#include "credits.hpp"
 #include "enemy.hpp"
 #include "player-enemy-collision.hpp"
 #include "player.hpp"
@@ -12,7 +13,7 @@
 
 Texture2D background;
 
-enum class GameState { Start, Playing, GameOver };
+enum class GameState { Start, Playing, GameOver, Credits };
 enum class MusicTrack { None, Theme, RegularWave, BossFight, WaveCleared, GameOver };
 
 void drawCenteredText(const char* text, int y, int fontSize, Color color) {
@@ -87,6 +88,11 @@ int main() {
             gameState = GameState::Playing;
             currentWave = 1;
             startWave(currentWave);
+        } else if (gameState == GameState::Start && IsKeyPressed(KEY_C)) {
+            gameState = GameState::Credits;
+        } else if (gameState == GameState::Credits &&
+                   (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_ENTER))) {
+            gameState = GameState::Start;
         } else if (gameState == GameState::GameOver && IsKeyPressed(KEY_ENTER)) {
             Texture2D playerTexture = player.texture;
             player = Player{};
@@ -206,8 +212,10 @@ int main() {
             DrawText(TextFormat("Score: %u", player.score), 20, 50, 24, WHITE);
             DrawText(TextFormat("Wave: %d", currentWave), 20, 80, 24, SKYBLUE);
             if (waveIntermission) {
-                drawCenteredText("Wave cleared. Look alive, pilot. They're grouping up again.", 120,
-                                 24, YELLOW);
+                const char* intermissionMessage = (currentWave + 1) % 5 == 0
+                                                       ? "Wave cleared. Something big just got your address, pilot."
+                                                       : "Wave cleared. Look alive, pilot. They're grouping up again.";
+                drawCenteredText(intermissionMessage, 120, 24, YELLOW);
                 drawCenteredText(
                     TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,
                     BLUE);
@@ -219,6 +227,9 @@ int main() {
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);
             drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, GOLD);
+            drawCenteredText("Press C for credits", SCREEN_HEIGHT / 2 + 50, 20, LIGHTGRAY);
+        } else if (gameState == GameState::Credits) {
+            drawCreditsScreen();
         } else {
             drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, ORANGE);
             drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
