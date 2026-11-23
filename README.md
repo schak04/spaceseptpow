@@ -86,7 +86,7 @@ Sound effects, starfield background, persistent high score, gamepad support, and
 - **Sounds:**
   - [Theme](https://freesound.org/people/PhalanxKing/sounds/848138/)
   - [Regular Wave](https://freesound.org/people/TERMINEX/sounds/826075/)
-  - [Shooting](https://freesound.org/people/edwardszakal/sounds/592752/)
+  - [Shooting](https://freesound.org/people/qubodup/sounds/162404/)
   - [Boss Fight](https://freesound.org/people/Sirkoto51/sounds/443128/)
   - [Wave Cleared](https://freesound.org/people/BloodPixelHero/sounds/572624/)
   - [Game Over](https://freesound.org/people/AdamWeeden/sounds/157218/)
