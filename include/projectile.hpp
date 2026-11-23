@@ -28,6 +28,7 @@ struct BossProjectile {
 extern Projectile projectiles[MAX_PROJECTILES];
 extern BossProjectile bossProjectiles[MAX_BOSS_PROJECTILES];
 extern Sound shootingSound;
+extern Sound collisionSound;
 
 void moveProjectiles();
 void drawProjectiles();

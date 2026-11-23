@@ -54,6 +54,7 @@ void detectPlayerEnemyCollision() {
                 enemy.dimensions.y};
 
         if (CheckCollisionRecs(playerRec, enemyRec)) {
+            PlaySound(collisionSound);
             player.HP -= ENEMY_IMPACT;
             enemy.active = false;
             queueRegularEnemyReplacement();
@@ -88,6 +89,7 @@ void detectPlayerEnemyCollision() {
                 enemy.dimensions.y};
 
         if (CheckCollisionRecs(playerRec, enemyRec)) {
+            PlaySound(collisionSound);
             player.HP -= ENEMY_IMPACT;
             enemy.active = false;
             queueSpecialEnemyReplacement();
@@ -103,6 +105,7 @@ void detectPlayerEnemyCollision() {
         if (!projectile.active) continue;
 
         if (CheckCollisionCircleRec(projectile.pos, projectile.radius, playerRec)) {
+            PlaySound(collisionSound);
             projectile.active = false;
             player.HP -= ENEMY_IMPACT;
             if (player.HP <= 0) {
@@ -117,6 +120,7 @@ void detectPlayerEnemyCollision() {
         if (!pickup.active) continue;
 
         if (CheckCollisionCircleRec(pickup.pos, pickup.radius, playerRec)) {
+            PlaySound(collisionSound);
             player.HP += PICKUP_AMOUNT;
             if (player.HP > PLAYER_HP) player.HP = PLAYER_HP;
             pickup.active = false;

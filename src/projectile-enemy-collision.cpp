@@ -45,6 +45,7 @@ void detectProjectileEnemyCollision() {
             if (!projectile.active) continue;
 
             if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
+                PlaySound(collisionSound);
                 projectile.active = false;
                 enemy.HP -= PROJECTILE_IMPACT;
                 enemy.lastDamageTakenTime = (float)GetTime();
@@ -81,6 +82,7 @@ void detectProjectileEnemyCollision() {
             if (!projectile.active) continue;
 
             if (CheckCollisionPointRec(projectile.pos, enemyRec)) {
+                PlaySound(collisionSound);
                 projectile.active = false;
                 enemy.HP -= PROJECTILE_IMPACT;
                 enemy.lastDamageTakenTime = (float)GetTime();
@@ -130,6 +132,7 @@ void detectProjectileEnemyCollision() {
             if (!projectile.active || !CheckCollisionPointRec(projectile.pos, bossRec)) continue;
 
             projectile.active = false;
+            PlaySound(collisionSound);
             bossEnemy.HP -= PROJECTILE_IMPACT;
             bossEnemy.lastDamageTakenTime = (float)GetTime();
             if (bossEnemy.HP <= 0) {

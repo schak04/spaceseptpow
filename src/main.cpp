@@ -31,6 +31,7 @@ int main() {
     Music waveClearedMusic = LoadMusicStream("assets/sounds/wave-cleared.mp3");
     Music gameOverMusic = LoadMusicStream("assets/sounds/game-over.mp3");
     shootingSound = LoadSound("assets/sounds/shooting.mp3");
+    collisionSound = LoadSound("assets/sounds/collision.mp3");
     waveClearedMusic.looping = false;
     gameOverMusic.looping = false;
 
@@ -244,6 +245,7 @@ int main() {
     UnloadMusicStream(waveClearedMusic);
     UnloadMusicStream(gameOverMusic);
     UnloadSound(shootingSound);
+    UnloadSound(collisionSound);
     CloseAudioDevice();
     CloseWindow();
 
