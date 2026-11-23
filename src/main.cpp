@@ -13,6 +13,7 @@
 Texture2D background;
 
 enum class GameState { Start, Playing, GameOver };
+enum class MusicTrack { None, Theme, RegularWave, BossFight, WaveCleared, GameOver };
 
 void drawCenteredText(const char* text, int y, int fontSize, Color color) {
     DrawText(text, (SCREEN_WIDTH - MeasureText(text, fontSize)) / 2, y, fontSize, color);
@@ -21,6 +22,16 @@ void drawCenteredText(const char* text, int y, int fontSize, Color color) {
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
+
+    // audio
+    InitAudioDevice();
+    Music themeMusic = LoadMusicStream("assets/sounds/theme.mp3");
+    Music regularWaveMusic = LoadMusicStream("assets/sounds/regular-wave.mp3");
+    Music bossFightMusic = LoadMusicStream("assets/sounds/boss-fight.mp3");
+    Music waveClearedMusic = LoadMusicStream("assets/sounds/wave-cleared.mp3");
+    Music gameOverMusic = LoadMusicStream("assets/sounds/game-over.mp3");
+    waveClearedMusic.looping = false;
+    gameOverMusic.looping = false;
 
     // background
     background = LoadTexture("assets/background/space-parallax.png");
@@ -43,6 +54,12 @@ int main() {
     bool paused = false;
     float escapeHoldTimer = 0.0f;
     bool shouldQuit = false;
+    // to ensure the game over screen only shows after the game over music stops playing
+    bool gameOverPending = false;
+    // tracks active music state
+    MusicTrack activeMusicTrack = MusicTrack::None;
+    // gives access to the actual music object
+    Music* activeMusic = nullptr;
 
     while (!shouldQuit) {
         // background drawing
@@ -80,7 +97,8 @@ int main() {
             gameState = GameState::Playing;
         }
 
-        if (gameState == GameState::Playing && !paused && escapeHoldTimer == 0.0f && !shouldQuit) {
+        if (gameState == GameState::Playing && !gameOverPending && !paused &&
+            escapeHoldTimer == 0.0f && !shouldQuit) {
             // skipping gameplay updates to keep the cleared arena still
             // during the next-wave-starting warning
             if (waveIntermission) {
@@ -105,10 +123,63 @@ int main() {
                 if (isWaveComplete()) {
                     waveIntermission = true;
                     waveIntermissionTimer = 4.0f;
+                    StopMusicStream(regularWaveMusic);
+                    StopMusicStream(bossFightMusic);
+                    StopMusicStream(waveClearedMusic);
+                    PlayMusicStream(waveClearedMusic);
+                    activeMusic = &waveClearedMusic;
+                    activeMusicTrack = MusicTrack::WaveCleared;
                 }
             }
 
-            if (!player.active) gameState = GameState::GameOver;
+            if (!player.active) {
+                gameOverPending = true;
+                StopMusicStream(regularWaveMusic);
+                StopMusicStream(bossFightMusic);
+                StopMusicStream(waveClearedMusic);
+                PlayMusicStream(gameOverMusic);
+                activeMusic = &gameOverMusic;
+                activeMusicTrack = MusicTrack::GameOver;
+            }
+        }
+
+        if (gameState == GameState::Playing && !gameOverPending && !paused && !waveIntermission) {
+            MusicTrack waveTrack =
+                currentWave % 5 == 0 ? MusicTrack::BossFight : MusicTrack::RegularWave;
+            if (activeMusicTrack != waveTrack) {
+                if (activeMusic != nullptr) StopMusicStream(*activeMusic);
+                activeMusic =
+                    waveTrack == MusicTrack::BossFight ? &bossFightMusic : &regularWaveMusic;
+                activeMusicTrack = waveTrack;
+                PlayMusicStream(*activeMusic);
+            }
+        } else if (gameState == GameState::Playing && !gameOverPending && !paused &&
+                   waveIntermission && activeMusicTrack != MusicTrack::WaveCleared) {
+            if (activeMusic != nullptr) StopMusicStream(*activeMusic);
+            activeMusic = &waveClearedMusic;
+            activeMusicTrack = MusicTrack::WaveCleared;
+            PlayMusicStream(waveClearedMusic);
+        } else if (gameState == GameState::Start || gameState == GameState::GameOver ||
+                   (gameState == GameState::Playing && paused)) {
+            if (activeMusicTrack != MusicTrack::Theme) {
+                if (activeMusic != nullptr) StopMusicStream(*activeMusic);
+                activeMusic = &themeMusic;
+                activeMusicTrack = MusicTrack::Theme;
+                PlayMusicStream(themeMusic);
+            }
+        }
+
+        if (activeMusic != nullptr) UpdateMusicStream(*activeMusic);
+
+        // NOTE: tried checking
+        // GetMusicTimePlayed(gameOverMusic) >= GetMusicTimeLength(gameOverMusic)
+        // but it didn't work because GetMusicTimePlayed() wraps at the track length so it may never
+        // reach or exceed GetMusicTimeLength()
+        // IsMusicStreamPlaying(gameOverMusic) handles the same well
+        if (gameOverPending && activeMusicTrack == MusicTrack::GameOver &&
+            !IsMusicStreamPlaying(gameOverMusic)) {
+            gameOverPending = false;
+            gameState = GameState::GameOver;
         }
 
         BeginDrawing();
@@ -166,6 +237,12 @@ int main() {
     UnloadTexture(specialEnemyTexture);
     UnloadTexture(bossEnemyTexture);
     UnloadTexture(background);
+    UnloadMusicStream(themeMusic);
+    UnloadMusicStream(regularWaveMusic);
+    UnloadMusicStream(bossFightMusic);
+    UnloadMusicStream(waveClearedMusic);
+    UnloadMusicStream(gameOverMusic);
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
