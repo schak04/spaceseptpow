@@ -32,7 +32,7 @@ int specialEnemiesToDefeat = 0;
 
 void startWave(int waveNumber) {
     resetBossProjectiles();
-    bossEnemy.active = waveNumber % 5 == 0;
+    bossEnemy.active = waveNumber % BOSS_FIGHT_WAVE == 0;
     bossEnemy.HP = BOSS_ENEMY_HP;
     bossEnemy.lastDamageTakenTime = -1.0f;
     bossEnemy.pos = {(float)SCREEN_WIDTH / 2.0f, 170.0f};
@@ -125,12 +125,22 @@ void updateBossEnemy() {
         bossEnemy.pos.y - bossEnemy.dimensions.y / 2.0f +
             visibleBottom / bossEnemyTexture.height * bossEnemy.dimensions.y};
 
+    // aim the projectiles at the player's current position
     const float dx = player.pos.x + player.dimensions.x / 2.0f - muzzle.x;
     const float dy = player.pos.y + player.dimensions.y / 2.0f - muzzle.y;
-    const float distance = std::sqrt(dx * dx + dy * dy);
+    // angle gives the spread a direction toward the player
+    const float angle = std::atan2(dy, dx);
+    // tune boss projectile speed separately from the player's projectile speed
     const float speed = 350.0f;
+    // spread is in radians and controls the angular gap between shots
+    const float spread = 0.18f;
 
-    spawnBossProjectile(muzzle, {dx / distance * speed, dy / distance * speed});
+    // a narrow spread makes the projectiles harder to dodge than a single aimed shot
+    for (int i = 0; i < 4; i++) {
+        const float projectileAngle = angle + (i - 1.5f) * spread;
+        spawnBossProjectile(muzzle,
+                            {std::cos(projectileAngle) * speed, std::sin(projectileAngle) * speed});
+    }
 }
 
 void drawBossEnemy() {

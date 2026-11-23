@@ -212,9 +212,10 @@ int main() {
             DrawText(TextFormat("Score: %u", player.score), 20, 50, 24, WHITE);
             DrawText(TextFormat("Wave: %d", currentWave), 20, 80, 24, SKYBLUE);
             if (waveIntermission) {
-                const char* intermissionMessage = (currentWave + 1) % 5 == 0
-                                                       ? "Wave cleared. Something big just got your address, pilot."
-                                                       : "Wave cleared. Look alive, pilot. They're grouping up again.";
+                const char* intermissionMessage =
+                    (currentWave + 1) % BOSS_FIGHT_WAVE == 0
+                        ? "Wave cleared. Something big just got your address, pilot."
+                        : "Wave cleared. Look alive, pilot. They're grouping up again.";
                 drawCenteredText(intermissionMessage, 120, 24, YELLOW);
                 drawCenteredText(
                     TextFormat("Next wave in: %d", (int)std::ceil(waveIntermissionTimer)), 155, 24,

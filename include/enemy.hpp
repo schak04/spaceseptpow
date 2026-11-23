@@ -10,6 +10,7 @@
 #define SPECIAL_ENEMY_HP 200
 #define BOSS_ENEMY_HP 4000
 #define MAX_ENERGY_PICKUPS MAX_SPECIAL_ENEMIES
+#define BOSS_FIGHT_WAVE 5
 
 struct RegularEnemy {
     int HP = REGULAR_ENEMY_HP;
