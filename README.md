@@ -2,7 +2,7 @@
 
 This project is a 2D top-down space shooter game that I'm writing in C++ using raylib.
 
-- **Platform:** Linux native. macOS, Windows, and Steam Deck support is planned once the initial version is complete.
+- **Platforms:** Linux (developed on Arch Linux, with the Steam Deck as a target), Windows, and macOS.
 - **Arena:** One fixed screen, 1280x720
 - **Players:** Single player
 
@@ -25,12 +25,23 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 
 ### Controls
 
-| Input             | Action          |
-| ----------------- | --------------- |
-| WASD / Arrow Keys | Move            |
-| Space             | Shoot           |
-| Escape            | Pause or resume |
-| Hold Escape       | Quit the game   |
+| Keyboard          | Gamepad / Steam Deck | Action                 |
+| ----------------- | -------------------- | ---------------------- |
+| WASD / Arrow Keys | Left stick / D-pad   | Move                   |
+| Space             | A                    | Shoot                  |
+| Enter             | Tap Start / Menu     | Start or restart       |
+| Escape            | Tap Start / Menu     | Pause or resume        |
+| Hold Escape       | Hold Start / Menu    | Quit after 1.5 seconds |
+| C                 | Y                    | Open or close credits  |
+
+### Playing the game
+
+Download the package for your platform from the repository's Releases page and keep its contents together when extracting it.
+
+- **Linux:** Extract the `.tar.gz` package and launch `spaceseptpow` from the extracted folder.
+- **Steam Deck:** Switch to Desktop Mode, download and extract the Linux `.tar.gz` package, then add `spaceseptpow` as a non-Steam game in Steam. Return to Game Mode to launch it. The built-in controller layout supports movement, shooting, starting, restarting, credits, and pause.
+- **Windows:** Extract the ZIP file and launch `spaceseptpow.exe`.
+- **macOS:** Open the DMG and drag `spaceseptpow.app` to Applications. The app is not signed or notarised yet, so macOS may block its first launch. Control-click the app and choose **Open** to allow it.
 
 ### Rules and Mechanics
 
@@ -51,14 +62,12 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 | Special | Similar to regular with abrupt random zig-zag motion, deals contact damage | 200 base | 10    | Yes (50% chance) |
 | Boss    | Large, stationary ship that fires aimed projectiles                        | 4000     | 100   | No               |
 
-Their HP bars appear for one second after taking damage. Enemies deal contact damage only in v1.
-
 ### UI
 
 - **HUD:** HP bar, score, wave counter, and next-wave warning with a countdown during the pause. The warning appears below the wave-cleared message.
-- **Pause and quit:** Press `Escape` to pause or resume gameplay. Holding `Escape` for 1.5 seconds quits; a message appears at the top right while the key is held. The wave countdown also pauses.
+- **Pause and quit:** Press `Escape` (keyboard) or tap `Start / Menu` (gamepad) to pause or resume gameplay. Hold either for 1.5 seconds to quit; a message appears at the top right while held. The wave countdown also pauses.
 - **Start screen:** Title, controls, and start prompt
-- **Game Over screen:** Final score and restart prompt. Highest wave and flavour text are not currently displayed.
+- **Game Over screen:** Final score and restart prompt
 
 ---
 
@@ -73,7 +82,47 @@ Parameters to dial in during playtesting:
 
 ### Stretch Goals (Post-MVP)
 
-Sound effects, starfield background, persistent high score, gamepad support, and a Steam Deck build.
+- [ ] More interesting and engaging boss fights
+- [ ] Persistent high score
+
+---
+
+## Building and packaging
+
+> These instructions are only for experimentation. Contributions are not being sought, as this is a personal hobby project of mine, purely for my learning.
+
+<details>
+<summary>View Instructions</summary>
+
+Build packages on the platform they target. Install CMake 3.25 or later, Git, and a C++17 compiler. Linux and macOS use Make; Windows uses Ninja. The first CMake configure downloads raylib 5.5, so it needs network access.
+
+On Arch Linux, install the compiler, build tools, and Linux development libraries with:
+
+```sh
+sudo pacman -S --needed base-devel cmake git alsa-lib mesa libx11 libxrandr libxi libxcursor libxinerama
+```
+
+Windows builds use Visual Studio 2022 Build Tools with the C++ workload and Ninja, run from Developer PowerShell. macOS builds use the Xcode Command Line Tools.
+
+On Linux and macOS, configure, build, and package with Make:
+
+```sh
+cmake --preset release-make
+cmake --build --preset release-make
+cmake --build --preset release-make --target package
+```
+
+On Windows, use the Ninja preset:
+
+```sh
+cmake --preset release
+cmake --build --preset release
+cmake --build --preset release --target package
+```
+
+Packages are written to the matching preset directory under `build`. CMake produces a `.tar.gz` archive on Linux, a ZIP on Windows, and a DMG containing a macOS app bundle on macOS. Each package contains the executable, its assets, `PLAYER_GUIDE.txt`, and this README with full asset credits. Use the native compiler architecture for the target machine; the Steam Deck package should be built for x86_64 Linux.
+
+</details>
 
 ---
 

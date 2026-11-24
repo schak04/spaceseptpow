@@ -34,7 +34,13 @@ void moveProjectiles() {  // TODO: separate spawning and updating projectiles la
 
     // find a free slot in the projectiles array to spawn a projectile
     // and skip firing if all slots are occupied
-    if (player.active && IsKeyPressed(KEY_SPACE)) {
+
+    // combine keyboard and gamepad input into one action
+    // either input can trigger projectile spawning
+    const bool gamepadShootPressed =
+        IsGamepadAvailable(0) && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_DOWN);
+    const bool shootPressed = IsKeyPressed(KEY_SPACE) || gamepadShootPressed;
+    if (player.active && shootPressed) {
         for (int i = 0; i < MAX_PROJECTILES; i++) {
             if (!projectiles[i].active) {
                 // projectile spawning

@@ -1,0 +1,34 @@
+SpaceSept Pow!
+
+Getting started
+---------------
+
+Keep the game and assets together in the extracted package.
+
+Linux: Extract the .tar.gz package and launch spaceseptpow from the extracted
+folder.
+
+Steam Deck: Switch to Desktop Mode, download and extract the Linux .tar.gz
+package, then add spaceseptpow as a non-Steam game in Steam. Return to Game Mode
+to launch it. The built-in controller layout supports movement, shooting,
+starting, restarting, credits, pausing, and quitting.
+
+Windows: Extract the ZIP file and launch spaceseptpow.exe.
+
+macOS: Open the DMG and drag spaceseptpow.app to Applications. The app is not
+signed or notarised yet, so macOS may block its first launch. Control-click the
+app and choose Open to allow it.
+
+Controls
+--------
+
+| Keyboard          | Gamepad / Steam Deck | Action                 |
+| ----------------- | -------------------- | ---------------------- |
+| WASD / Arrow Keys | Left stick / D-pad   | Move                   |
+| Space             | A                    | Shoot                  |
+| Enter             | Tap Start / Menu     | Start or restart       |
+| Escape            | Tap Start / Menu     | Pause or resume        |
+| Hold Escape       | Hold Start / Menu    | Quit after 1.5 seconds |
+| C                 | Y                    | Open or close credits  |
+
+Asset links and full credits are in the README.

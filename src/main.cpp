@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <ctime>
+#include <filesystem>
+#include <string>
 
 #include "constants.hpp"
 #include "credits.hpp"
@@ -20,42 +22,56 @@ void drawCenteredText(const char* text, int y, int fontSize, Color color) {
     DrawText(text, (SCREEN_WIDTH - MeasureText(text, fontSize)) / 2, y, fontSize, color);
 }
 
+// get the directory containing the running executable
+// macOS stores resources inside the .app bundle, unlike other platforms
+std::string getAssetPath(const char* relativePath) {
+    std::filesystem::path assetDirectory = GetApplicationDirectory();
+#ifdef __APPLE__
+    assetDirectory /= "../Resources/assets";
+#else
+    assetDirectory /= "assets";
+#endif
+    return (assetDirectory / relativePath).string();
+}
+
 int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME);
     SetTargetFPS(60);
 
     // audio
     InitAudioDevice();
-    Music themeMusic = LoadMusicStream("assets/sounds/theme.mp3");
-    Music regularWaveMusic = LoadMusicStream("assets/sounds/regular-wave.mp3");
-    Music bossFightMusic = LoadMusicStream("assets/sounds/boss-fight.mp3");
-    Music waveClearedMusic = LoadMusicStream("assets/sounds/wave-cleared.mp3");
-    Music gameOverMusic = LoadMusicStream("assets/sounds/game-over.mp3");
-    shootingSound = LoadSound("assets/sounds/shooting.mp3");
-    collisionSound = LoadSound("assets/sounds/collision.mp3");
+    Music themeMusic = LoadMusicStream(getAssetPath("sounds/theme.mp3").c_str());
+    Music regularWaveMusic = LoadMusicStream(getAssetPath("sounds/regular-wave.mp3").c_str());
+    Music bossFightMusic = LoadMusicStream(getAssetPath("sounds/boss-fight.mp3").c_str());
+    Music waveClearedMusic = LoadMusicStream(getAssetPath("sounds/wave-cleared.mp3").c_str());
+    Music gameOverMusic = LoadMusicStream(getAssetPath("sounds/game-over.mp3").c_str());
+    shootingSound = LoadSound(getAssetPath("sounds/shooting.mp3").c_str());
+    collisionSound = LoadSound(getAssetPath("sounds/collision.mp3").c_str());
     waveClearedMusic.looping = false;
     gameOverMusic.looping = false;
 
     // background
-    background = LoadTexture("assets/background/space-parallax.png");
+    background = LoadTexture(getAssetPath("background/space-parallax.png").c_str());
 
     // change the starting state of the random number generator used by GetRandomValue()
     // so it's truly random
     SetRandomSeed((unsigned int)time(nullptr));
 
     // TODO: add error handling later sometime
-    player.texture = LoadTexture("assets/player/player-spaceship.png");
+    player.texture = LoadTexture(getAssetPath("player/player-spaceship.png").c_str());
 
-    regularEnemyTexture = LoadTexture("assets/enemies/regular/regular-enemy-spaceship.png");
-    specialEnemyTexture = LoadTexture("assets/enemies/special/special-enemy-spaceship.png");
-    bossEnemyTexture = LoadTexture("assets/enemies/boss/boss-enemy-spaceship.png");
+    regularEnemyTexture =
+        LoadTexture(getAssetPath("enemies/regular/regular-enemy-spaceship.png").c_str());
+    specialEnemyTexture =
+        LoadTexture(getAssetPath("enemies/special/special-enemy-spaceship.png").c_str());
+    bossEnemyTexture = LoadTexture(getAssetPath("enemies/boss/boss-enemy-spaceship.png").c_str());
 
     GameState gameState = GameState::Start;
     int currentWave = 0;
     bool waveIntermission = false;
     float waveIntermissionTimer = 0.0f;
     bool paused = false;
-    float escapeHoldTimer = 0.0f;
+    float quitHoldTimer = 0.0f;
     bool shouldQuit = false;
     // to ensure the game over screen only shows after the game over music stops playing
     bool gameOverPending = false;
@@ -65,6 +81,16 @@ int main() {
     Music* activeMusic = nullptr;
 
     while (!shouldQuit) {
+        // check whether a controller is connected before querying its input
+        // gamepad index 0 refers to the first connected controller
+        const bool gamepadAvailable = IsGamepadAvailable(0);
+        const bool gamepadStartPressed =
+            gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT);
+        const bool gamepadStartDown =
+            gamepadAvailable && IsGamepadButtonDown(0, GAMEPAD_BUTTON_MIDDLE_RIGHT);
+        const bool gamepadCreditsPressed =
+            gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_UP);
+
         // background drawing
         Rectangle backgroundSrcRect = {0.0f, 0.0f, (float)background.width,
                                        (float)background.height};
@@ -75,25 +101,30 @@ int main() {
             DrawTexturePro(background, backgroundSrcRect, backgroundDestRect, backgroundOrigin,
                            0.0f, WHITE);
 
-        if (gameState == GameState::Playing && IsKeyPressed(KEY_ESCAPE)) paused = !paused;
-
-        if (IsKeyDown(KEY_ESCAPE)) {
-            escapeHoldTimer += GetFrameTime();
-            if (escapeHoldTimer >= 1.5f) shouldQuit = true;
-        } else {
-            escapeHoldTimer = 0.0f;
+        if (gameState == GameState::Playing && (IsKeyPressed(KEY_ESCAPE) || gamepadStartPressed)) {
+            paused = !paused;
         }
 
-        if (gameState == GameState::Start && IsKeyPressed(KEY_ENTER)) {
+        if (IsKeyDown(KEY_ESCAPE) || gamepadStartDown) {
+            quitHoldTimer += GetFrameTime();
+            if (quitHoldTimer >= 1.5f) shouldQuit = true;
+        } else {
+            quitHoldTimer = 0.0f;
+        }
+
+        if (gameState == GameState::Start && (IsKeyPressed(KEY_ENTER) || gamepadStartPressed)) {
             gameState = GameState::Playing;
             currentWave = 1;
             startWave(currentWave);
-        } else if (gameState == GameState::Start && IsKeyPressed(KEY_C)) {
+        } else if (gameState == GameState::Start &&
+                   (IsKeyPressed(KEY_C) || gamepadCreditsPressed)) {
             gameState = GameState::Credits;
         } else if (gameState == GameState::Credits &&
-                   (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_ENTER))) {
+                   (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_ENTER) || gamepadStartPressed ||
+                    gamepadCreditsPressed)) {
             gameState = GameState::Start;
-        } else if (gameState == GameState::GameOver && IsKeyPressed(KEY_ENTER)) {
+        } else if (gameState == GameState::GameOver &&
+                   (IsKeyPressed(KEY_ENTER) || gamepadStartPressed)) {
             Texture2D playerTexture = player.texture;
             player = Player{};
             player.texture = playerTexture;
@@ -106,7 +137,7 @@ int main() {
         }
 
         if (gameState == GameState::Playing && !gameOverPending && !paused &&
-            escapeHoldTimer == 0.0f && !shouldQuit) {
+            quitHoldTimer == 0.0f && !shouldQuit) {
             // skipping gameplay updates to keep the cleared arena still
             // during the next-wave-starting warning
             if (waveIntermission) {
@@ -227,19 +258,19 @@ int main() {
             }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);
-            drawCenteredText("Press ENTER to start", SCREEN_HEIGHT / 2 + 10, 24, GOLD);
-            drawCenteredText("Press C for credits", SCREEN_HEIGHT / 2 + 50, 20, LIGHTGRAY);
+            drawCenteredText("Press ENTER or START to start", SCREEN_HEIGHT / 2 + 10, 24, GOLD);
+            drawCenteredText("Press C or Y for credits", SCREEN_HEIGHT / 2 + 50, 20, LIGHTGRAY);
         } else if (gameState == GameState::Credits) {
             drawCreditsScreen();
         } else {
             drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, ORANGE);
             drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
                              LIGHTGRAY);
-            drawCenteredText("Press ENTER to restart", SCREEN_HEIGHT / 2 + 40, 24, GOLD);
+            drawCenteredText("Press ENTER or START to restart", SCREEN_HEIGHT / 2 + 40, 24, GOLD);
         }
 
-        if (escapeHoldTimer > 0.0f) {
-            const char* message = "Quitting game...";
+        if (quitHoldTimer > 0.0f) {
+            const char* message = "Hold ESC or START to quit";
             DrawText(message, SCREEN_WIDTH - MeasureText(message, 20) - 20, 20, 20, LIGHTGRAY);
         }
 

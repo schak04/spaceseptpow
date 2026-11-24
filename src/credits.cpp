@@ -30,5 +30,5 @@ void drawCreditsScreen() {
 
     drawCenteredText("Asset links and full credits are in the project README.", 555, 18,
                      LIGHTGRAY);
-    drawCenteredText("Press C or ENTER to return", 610, 20, GOLD);
+    drawCenteredText("Press C, Y, ENTER, or START to return", 610, 20, GOLD);
 }

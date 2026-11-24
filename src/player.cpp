@@ -18,15 +18,57 @@ void movePlayer() {
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) input.x -= 1.0f;
     if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) input.x += 1.0f;
 
+    // check whether the first gamepad (index 0) is connected
+    if (IsGamepadAvailable(0)) {
+        // NOTE: ANALOG STICK INPUT
+        // unlike keyboard keys, analog sticks return floating-point values
+        // typically ranging from -1.0 to +1.0
+        // -1.0 = fully left/up
+        // 0.0 = centered
+        // +1.0 = fully right/down
+        // physical sticks might report small non-zero values even when untouched (stick drift)
+        // -> a deadzone filters those out
+
+        // check whether the controller has enough axes to include the left y axis
+        // both the left x and y axes are needed to read the complete stick
+        if (GetGamepadAxisCount(0) > GAMEPAD_AXIS_LEFT_Y) {
+            // ignore stick movements whose absolute value is 0.2 or less
+            const float deadzone = 0.2f;
+
+            // read the horizontal (x) and vertical (y) axes of the left analog stick
+            const float stickX = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
+            const float stickY = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
+
+            // add the analog stick values to the input vector
+            // add rather than assign because keyboard input might already exist
+            if (std::fabs(stickX) > deadzone) input.x += stickX;
+            if (std::fabs(stickY) > deadzone) input.y += stickY;
+        }
+
+        // NOTE: D-PAD INPUT
+        // The D-pad is digital, just like a keyboard: each direction is either
+        // pressed or not pressed. So it contributes -1 or +1 to the input.
+        if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP)) input.y -= 1.0f;
+        if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN)) input.y += 1.0f;
+        if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT)) input.x -= 1.0f;
+        if (IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT)) input.x += 1.0f;
+    }
+
     // normalize input (if its magnitude is non-zero)
     // NOTE: magnitude of a vector, |v| = (x^2 + y^2)^(0.5)
+
+    // normalize keyboard and d-pad input while preserving analog stick intensity
     float inputMagnitude = std::sqrt(input.x * input.x + input.y * input.y);
+    if (inputMagnitude > 1.0f) {
+        input.x /= inputMagnitude;
+        input.y /= inputMagnitude;
+    }
 
     player.acceleration = {0.0f, 0.0f};
 
-    if (inputMagnitude > 0.0f) {
-        player.acceleration.x = (input.x / inputMagnitude) * inputInducedAcc;
-        player.acceleration.y = (input.y / inputMagnitude) * inputInducedAcc;
+    if (input.x != 0.0f || input.y != 0.0f) {
+        player.acceleration.x = input.x * inputInducedAcc;
+        player.acceleration.y = input.y * inputInducedAcc;
     }
 
     player.velocity.x += player.acceleration.x * dt;

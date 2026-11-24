@@ -1,3 +1,4 @@
-cmake --build build
+cmake --preset release-make
+cmake --build --preset release-make
 
-./build/spaceseptpow
+./build/release-make/spaceseptpow
