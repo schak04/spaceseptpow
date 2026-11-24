@@ -15,7 +15,7 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 > - "Sept" comes from my name (Saptaparno; nickname/shortened name: Sapto).
 > - "Pow" is an onomatopoeic expression associated with shooting, since this is a space **shooter**.
 >
-> I know the name is a bit wanky, but it feels unique and I like it (...I also couldn't think of a better name and I'll rename it if I happen to.).
+> I know the name is a bit silly, but it feels unique and I like it.
 
 ---
 
@@ -24,6 +24,8 @@ This project is a 2D top-down space shooter game that I'm writing in C++ using r
 **Core Loop:** Move, shoot, collect energy, survive harder waves, die, restart.
 
 ### Controls
+
+Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
 
 | Keyboard          | Gamepad / Steam Deck | Action                 |
 | ----------------- | -------------------- | ---------------------- |
@@ -45,28 +47,30 @@ Download the package for your platform from the repository's Releases page and k
 
 ### Rules and Mechanics
 
-- **Movement:** 8 directions with inertia as the primary mechanic. Input provides acceleration, drag dampens speed, and position updates from velocity and delta time.
-- **Shooting:** Fires straight up with `Space`. No rotation or mouse aiming: ship positioning dictates hits.
-- **Health (HP):** Starts at 500 HP. Enemy contact deals 50 damage; reaching zero triggers Game Over.
-- **Pickups:** Special enemies have a 50% chance to drop an energy pickup when destroyed by a projectile. Player-enemy collision does not cause drops. Collecting a pickup restores 100 HP, up to the 500 HP maximum. Uncollected pickups expire after two seconds.
-- **Waves:** Wave 1 requires 12 regular and 3 special enemy defeats. Every fifth wave is a boss fight and does not spawn regular or special enemies. Enemies that leave the arena are replaced and do not count as defeats. Enemy contact also replaces the enemy without counting as a defeat, but deals player damage. The wave clears only after all required defeats are made and no enemies remain active. Gameplay pauses for a four-second warning before the next wave.
-- **Wave scaling:** Scaling is deterministic and based on the wave number. Every two waves, regular enemy count increases by 2 (maximum 24), enemy speed increases by 5% (maximum 40% above base), and spawn intervals decrease by 0.05 seconds for regular enemies and 0.1 seconds for special enemies (floors of 0.5 and 1.5 seconds). Every four waves, special enemy count increases by 1 (maximum 6), and regular and special HP increase by 25 and 50 (maximum 200 and 400 HP, twice base). The caps are reached at wave 13 for regular and special enemy counts, wave 17 for HP and speed, and wave 21 for spawn intervals. Values remain at their caps thereafter.
-- **Score:** Destroying a regular enemy awards 5 points, a special enemy awards 10 points, and a boss awards 100 points. No win condition: survive as long as possible.
-- **States:** Start, Playing, and Game Over.
+- **Movement:** Move in 8 directions with inertia. Keyboard input uses `WASD` or the arrow keys; gamepad input uses the left stick or D-pad. Acceleration moves the player spaceship, while drag slows it down.
+- **Shooting:** Press `Space` on a keyboard or `A` on a gamepad to fire a shot straight up. Shots deal 50 damage. There is no aiming; ship position determines where shots land.
+- **Health (HP):** Starts at 500 HP. Contact with regular or special enemies, and hits from boss projectiles, deal 50 damage. Reaching zero triggers Game Over.
+- **Pickups:** Destroying a special enemy with a player shot has a 50% chance to drop an energy pickup. Contact damage does not cause drops. Collecting one restores 100 HP, up to 500 HP; each pickup expires after 2 seconds.
+- **Waves:** Wave 1 requires defeating 12 regular and 3 special enemies. Every fifth wave is a boss fight with no regular or special enemies. Enemies that leave the arena are replaced and do not count as defeats. Contacting regular or special enemies damages the player and replaces the enemy without counting as a defeat. A wave clears after all required defeats and no enemies remain active. A four-second intermission follows; its countdown pauses with gameplay.
+- **Boss fights:** The boss has 4000 HP and fires 4 projectiles in a spread aimed around the player's current position every 1.5 seconds. Each hit deals 50 damage.
+- **Wave scaling:** Scaling is deterministic. Every two waves, the regular enemy defeat target increases by 2 (maximum 24), enemy speeds increase by 5% (maximum 40% above base), and regular/special spawn intervals decrease by 0.05/0.1 seconds (floors of 0.5/1.5 seconds). Every four waves, the special enemy defeat target increases by 1 (maximum 6), and regular/special HP increase by 25/50 (maximum 200/400 HP). Counts cap at wave 13, HP and speed at wave 17, and spawn intervals at wave 21; values stay the same from then on.
+- **Score:** Destroying a regular enemy awards 5 points, a special enemy 10, and a boss 100. There is no win condition; survive as long as possible and have fun shooting the bad guy ships.
+- **States:** Start, Playing, Game Over, and Credits. Press `C` or gamepad `Y` on the start screen to open Credits.
 
 ### Enemies
 
-| Type    | Behaviour                                                                  | HP       | Score | Drops Energy     |
-| ------- | -------------------------------------------------------------------------- | -------- | ----- | ---------------- |
-| Regular | Spawns at arena edge, moves vertically straight, deals contact damage      | 100 base | 5     | No               |
-| Special | Similar to regular with abrupt random zig-zag motion, deals contact damage | 200 base | 10    | Yes (50% chance) |
-| Boss    | Large, stationary ship that fires aimed projectiles                        | 4000     | 100   | No               |
+| Type    | Behaviour                                                      | HP       | Score | Drops Energy     |
+| ------- | -------------------------------------------------------------- | -------- | ----- | ---------------- |
+| Regular | Spawns at arena edge, moves vertically, deals contact damage   | 100 base | 5     | No               |
+| Special | Moves in abrupt random zig-zags and deals contact damage       | 200 base | 10    | Yes (50% chance) |
+| Boss    | Stationary; fires a four-projectile spread aimed at the player | 4000     | 100   | No               |
 
 ### UI
 
 - **HUD:** HP bar, score, wave counter, and next-wave warning with a countdown during the pause. The warning appears below the wave-cleared message.
 - **Pause and quit:** Press `Escape` (keyboard) or tap `Start / Menu` (gamepad) to pause or resume gameplay. Hold either for 1.5 seconds to quit; a message appears at the top right while held. The wave countdown also pauses.
-- **Start screen:** Title, controls, and start prompt
+- **Start screen:** Title, start prompt, and a credits prompt. `Enter` or gamepad `Start / Menu` starts the game; `C` or gamepad `Y` opens Credits.
+- **Credits screen:** Developer and asset credits. Return with `C`, `Y`, `Enter`, or `Start / Menu`.
 - **Game Over screen:** Final score and restart prompt
 
 ---

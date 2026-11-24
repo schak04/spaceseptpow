@@ -22,6 +22,8 @@ app and choose Open to allow it.
 Controls
 --------
 
+Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
+
 | Keyboard          | Gamepad / Steam Deck | Action                 |
 | ----------------- | -------------------- | ---------------------- |
 | WASD / Arrow Keys | Left stick / D-pad   | Move                   |
