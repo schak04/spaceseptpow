@@ -43,7 +43,7 @@ Download the package for your platform from the repository's [Releases](https://
 > Linux build available; MacOS and Windows builds are yet to be uploaded.
 
 - **Linux:** Extract the `.tar.gz` package and launch `spaceseptpow` from the extracted folder.
-- **Steam Deck:** Switch to Desktop Mode, download and extract the Linux `.tar.gz` package, then add `spaceseptpow` as a non-Steam game in Steam. Return to Game Mode to launch it. The built-in controller layout supports movement, shooting, starting, restarting, credits, and pause.
+- **Steam Deck:** Switch to Desktop Mode, download and extract the Linux `.tar.gz` package, then add `spaceseptpow` as a non-Steam game in Steam. Return to Game Mode to launch it. The game supports the Steam Deck's built-in controls for movement, shooting, starting, restarting, credits, and pausing.
 - **Windows:** Extract the ZIP file and launch `spaceseptpow.exe`.
 - **macOS:** Open the DMG and drag `spaceseptpow.app` to Applications. The app is not signed or notarised yet, so macOS may block its first launch. Control-click the app and choose **Open** to allow it.
 
