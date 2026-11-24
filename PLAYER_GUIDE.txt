@@ -10,8 +10,8 @@ folder.
 
 Steam Deck: Switch to Desktop Mode, download and extract the Linux .tar.gz
 package, then add spaceseptpow as a non-Steam game in Steam. Return to Game Mode
-to launch it. The built-in controller layout supports movement, shooting,
-starting, restarting, credits, pausing, and quitting.
+to launch it. The game supports Steam Deck controls for movement, shooting, 
+starting, restarting, viewing credits, pausing, and quitting.
 
 Windows: Extract the ZIP file and launch spaceseptpow.exe.
 
@@ -30,5 +30,3 @@ Controls
 | Escape            | Tap Start / Menu     | Pause or resume        |
 | Hold Escape       | Hold Start / Menu    | Quit after 1.5 seconds |
 | C                 | Y                    | Open or close credits  |
-
-Asset links and full credits are in the README.
