@@ -89,22 +89,47 @@ Parameters to dial in during playtesting:
 
 ## Building and packaging
 
-> These instructions are only for experimentation/exploration. Contributions are not being sought, as this is a personal hobby project of mine, purely for learning and enjoyment.
+> These instructions are for experimentation and exploration only. Contributions are not being sought, as this is a personal hobby project made purely for learning and enjoyment.
 
 <details>
 <summary>View Instructions</summary>
 
-Build packages on the platform they target. Install CMake 3.25 or later, Git, and a C++17 compiler. Linux and macOS use Make; Windows uses Ninja. The first CMake configure downloads raylib 5.5, so it needs network access.
+### Prerequisites
 
-On Arch Linux, install the compiler, build tools, and Linux development libraries with:
+- CMake 3.25 or later
+- Git
+- A C++17-compatible compiler
+- Make (Linux and macOS) or Ninja (Windows)
+
+The first CMake configuration downloads raylib 5.5, so an internet connection is required.
+
+### Platform-specific setup
+
+**Linux**
+
+On Linux systems, install the compiler, build tools, and required development libraries (if not already installed, obviously):
+
+For Arch (btw):
 
 ```sh
 sudo pacman -S --needed base-devel cmake git alsa-lib mesa libx11 libxrandr libxi libxcursor libxinerama
 ```
 
-Windows builds use Visual Studio 2022 Build Tools with the C++ workload and Ninja, run from Developer PowerShell. macOS builds use the Xcode Command Line Tools.
+For other distros, use the equivalent package manager to install the corresponding development packages (obviously).
 
-On Linux and macOS, configure, build, and package with Make:
+**Windows**
+
+Install Visual Studio 2022 Build Tools with the C++ workload and Ninja. Run the build commands from Developer PowerShell.
+
+**macOS**
+
+Install the Xcode Command Line Tools.
+
+### Building and packaging
+
+**Linux and macOS**
+
+Configure, build, and package using the Make preset:
 
 ```sh
 cmake --preset release-make
@@ -112,7 +137,9 @@ cmake --build --preset release-make
 cmake --build --preset release-make --target package
 ```
 
-On Windows, use the Ninja preset:
+**Windows**
+
+Configure, build, and package using the Ninja preset:
 
 ```sh
 cmake --preset release
@@ -120,7 +147,17 @@ cmake --build --preset release
 cmake --build --preset release --target package
 ```
 
-Packages are written to the matching preset directory under `build`. CMake produces a `.tar.gz` archive on Linux, a ZIP on Windows, and a DMG containing a macOS app bundle on macOS. Each package contains the executable, its assets, `PLAYER_GUIDE.txt`, and this README with full asset credits. Use the native compiler architecture for the target machine; the Steam Deck package should be built for x86_64 Linux.
+### Package output
+
+Packages are written to the corresponding preset directory under `build`. CMake produces:
+
+- **Linux:** `.tar.gz` archive
+- **Windows:** ZIP archive
+- **macOS:** DMG containing a macOS app bundle
+
+Each package includes the executable, its assets, `PLAYER_GUIDE.txt`, and this README with full asset credits.
+
+Use the native compiler architecture for the target machine. The Steam Deck package should be built for `x86_64 Linux`.
 
 </details>
 
