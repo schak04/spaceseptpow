@@ -38,7 +38,7 @@ Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
 
 ### Playing the game
 
-Download the package for your platform from the repository's Releases page and keep its contents together when extracting it.
+Download the package for your platform from the repository's [Releases](https://github.com/schak04/spaceseptpow/releases/tag/v1.0.0) page and keep its contents together when extracting it.
 
 > Linux build available; MacOS and Windows builds are yet to be uploaded.
 
