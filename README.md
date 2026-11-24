@@ -89,7 +89,7 @@ Parameters to dial in during playtesting:
 
 ## Building and packaging
 
-> These instructions are only for experimentation. Contributions are not being sought, as this is a personal hobby project of mine, purely for my learning.
+> These instructions are only for experimentation/exploration. Contributions are not being sought, as this is a personal hobby project of mine, purely for learning and enjoyment.
 
 <details>
 <summary>View Instructions</summary>
