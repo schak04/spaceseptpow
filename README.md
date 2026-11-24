@@ -40,6 +40,8 @@ Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
 
 Download the package for your platform from the repository's Releases page and keep its contents together when extracting it.
 
+> Linux build available; MacOS and Windows builds are yet to be uploaded.
+
 - **Linux:** Extract the `.tar.gz` package and launch `spaceseptpow` from the extracted folder.
 - **Steam Deck:** Switch to Desktop Mode, download and extract the Linux `.tar.gz` package, then add `spaceseptpow` as a non-Steam game in Steam. Return to Game Mode to launch it. The built-in controller layout supports movement, shooting, starting, restarting, credits, and pause.
 - **Windows:** Extract the ZIP file and launch `spaceseptpow.exe`.
