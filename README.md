@@ -1,6 +1,6 @@
 # SpaceSept Pow!
 
-This project is a 2D top-down space shooter game that I'm writing in C++ using raylib.
+This project is a 2D top-down space shooter game written in C++ using raylib.
 
 - **Platforms:** Linux (developed on Arch Linux, with the Steam Deck as a target), Windows, and macOS.
 - **Arena:** One fixed screen, 1280x720
