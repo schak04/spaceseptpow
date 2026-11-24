@@ -6,6 +6,7 @@ Projectile projectiles[MAX_PROJECTILES];
 BossProjectile bossProjectiles[MAX_BOSS_PROJECTILES];
 Sound shootingSound;
 Sound collisionSound;
+Sound energyPickupSound;
 
 void resetProjectiles() {
     for (Projectile& projectile : projectiles) projectile.active = false;

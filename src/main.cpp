@@ -47,6 +47,7 @@ int main() {
     Music gameOverMusic = LoadMusicStream(getAssetPath("sounds/game-over.mp3").c_str());
     shootingSound = LoadSound(getAssetPath("sounds/shooting.mp3").c_str());
     collisionSound = LoadSound(getAssetPath("sounds/collision.mp3").c_str());
+    energyPickupSound = LoadSound(getAssetPath("sounds/energy-pickup.mp3").c_str());
     waveClearedMusic.looping = false;
     gameOverMusic.looping = false;
 
@@ -289,6 +290,7 @@ int main() {
     UnloadMusicStream(gameOverMusic);
     UnloadSound(shootingSound);
     UnloadSound(collisionSound);
+    UnloadSound(energyPickupSound);
     CloseAudioDevice();
     CloseWindow();
 

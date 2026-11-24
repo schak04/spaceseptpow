@@ -29,6 +29,7 @@ extern Projectile projectiles[MAX_PROJECTILES];
 extern BossProjectile bossProjectiles[MAX_BOSS_PROJECTILES];
 extern Sound shootingSound;
 extern Sound collisionSound;
+extern Sound energyPickupSound;
 
 void moveProjectiles();
 void drawProjectiles();

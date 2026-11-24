@@ -120,7 +120,7 @@ void detectPlayerEnemyCollision() {
         if (!pickup.active) continue;
 
         if (CheckCollisionCircleRec(pickup.pos, pickup.radius, playerRec)) {
-            PlaySound(collisionSound);
+            PlaySound(energyPickupSound);
             player.HP += PICKUP_AMOUNT;
             if (player.HP > PLAYER_HP) player.HP = PLAYER_HP;
             pickup.active = false;

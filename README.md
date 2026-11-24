@@ -178,9 +178,11 @@ Use the native compiler architecture for the target machine. The Steam Deck pack
 - **Sounds:**
   - [Theme](https://freesound.org/people/PhalanxKing/sounds/848138/)
   - [Regular Wave](https://freesound.org/people/TERMINEX/sounds/826075/)
-  - [Shooting](https://freesound.org/people/qubodup/sounds/162404/)
+  - [Shooting](https://freesound.org/people/hotpin7/sounds/819682/)
+  - [Collision](https://freesound.org/people/qubodup/sounds/162404/)
   - [Boss Fight](https://freesound.org/people/Sirkoto51/sounds/443128/)
   - [Wave Cleared](https://freesound.org/people/BloodPixelHero/sounds/572624/)
+  - [Health Pickup](https://freesound.org/people/juancamiloorjuela/sounds/204318/)
   - [Game Over](https://freesound.org/people/AdamWeeden/sounds/157218/)
 
 ### References
