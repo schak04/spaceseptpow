@@ -127,7 +127,7 @@ Install Visual Studio 2022 Build Tools with the C++ workload and Ninja. Run the 
 
 **macOS**
 
-Install the Xcode Command Line Tools.
+Install the Xcode Command Line Tools and CMake 3.25 or later.
 
 ### Building and packaging
 
