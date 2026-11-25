@@ -22,13 +22,15 @@ app and choose Open to allow it.
 Controls
 --------
 
-Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
-
-| Keyboard          | Gamepad / Steam Deck | Action                 |
-| ----------------- | -------------------- | ---------------------- |
-| WASD / Arrow Keys | Left stick / D-pad   | Move                   |
-| Space             | A                    | Shoot                  |
-| Enter             | Tap Start / Menu     | Start or restart       |
-| Escape            | Tap Start / Menu     | Pause or resume        |
-| Hold Escape       | Hold Start / Menu    | Quit after 1.5 seconds |
-| C                 | Y                    | Open or close credits  |
+| Keyboard           | Gamepad            | Action                 |
+| ------------------ | ------------------ | ---------------------- |
+| WASD / Arrow Keys  | Left stick / D-pad | Move                   |
+| Space              | A                  | Shoot                  |
+| Enter              | Start / Menu       | Start or restart       |
+| Escape             | Start / Menu       | Pause or resume        |
+| Hold Escape        | Hold Start / Menu  | Quit after 1.5 seconds |
+| C                  | Y                  | Open credits           |
+| K                  | X                  | Open keybinds          |
+| F                  | View / Select      | Toggle fullscreen      |
+| C / Enter          | Y / Start / Menu   | Return from credits    |
+| Escape / K / Enter | B / X / Start/Menu | Return from keybinds   |

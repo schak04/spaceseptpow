@@ -27,6 +27,7 @@ FetchContent_MakeAvailable(raylib)
 
 add_executable(spaceseptpow
   src/credits.cpp
+  src/keybinds.cpp
   src/main.cpp
   src/player.cpp
   src/projectile.cpp

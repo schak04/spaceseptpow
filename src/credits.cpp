@@ -28,5 +28,5 @@ void drawCreditsScreen() {
     DrawText("Shooting sound: hotpin7", 250, 520, 18, LIGHTGRAY);
     DrawText("Collision sound: qubodup", 250, 545, 18, LIGHTGRAY);
     DrawText("Health pickup sound: juancamiloorjuela", 250, 570, 18, LIGHTGRAY);
-    drawCenteredText("Press C, Y, ENTER, or START to return", 625, 20, GOLD);
+    drawCenteredText("Return with C or ENTER on keyboard, Y or START on gamepad", 625, 20, GOLD);
 }

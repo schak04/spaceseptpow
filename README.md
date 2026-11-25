@@ -25,22 +25,22 @@ This project is a 2D top-down space shooter game written in C++ using raylib.
 
 ### Controls
 
-Gamepad bindings use raylib's standard mapping for PC gamepads and Steam Deck.
-
-| Keyboard          | Gamepad / Steam Deck | Action                 |
-| ----------------- | -------------------- | ---------------------- |
-| WASD / Arrow Keys | Left stick / D-pad   | Move                   |
-| Space             | A                    | Shoot                  |
-| Enter             | Tap Start / Menu     | Start or restart       |
-| Escape            | Tap Start / Menu     | Pause or resume        |
-| Hold Escape       | Hold Start / Menu    | Quit after 1.5 seconds |
-| C                 | Y                    | Open or close credits  |
+| Keyboard           | Gamepad            | Action                 |
+| ------------------ | ------------------ | ---------------------- |
+| WASD / Arrow Keys  | Left stick / D-pad | Move                   |
+| Space              | A                  | Shoot                  |
+| Enter              | Start / Menu       | Start or restart       |
+| Escape             | Start / Menu       | Pause or resume        |
+| Hold Escape        | Hold Start / Menu  | Quit after 1.5 seconds |
+| C                  | Y                  | Open credits           |
+| K                  | X                  | Open keybinds          |
+| F                  | View / Select      | Toggle fullscreen      |
+| C / Enter          | Y / Start / Menu   | Return from credits    |
+| Escape / K / Enter | B / X / Start/Menu | Return from keybinds   |
 
 ### Playing the game
 
 Download the package for your platform from the repository's [Releases](https://github.com/schak04/spaceseptpow/releases/tag/v1.0.0) page and keep its contents together when extracting it.
-
-> Linux build available; MacOS and Windows builds are yet to be uploaded.
 
 - **Linux:** Extract the `.tar.gz` package and launch `spaceseptpow` from the extracted folder.
 - **Steam Deck:** Switch to Desktop Mode, download and extract the Linux `.tar.gz` package, then add `spaceseptpow` as a non-Steam game in Steam. Return to Game Mode to launch it. The game supports the Steam Deck's built-in controls for movement, shooting, starting, restarting, credits, and pausing.
@@ -57,7 +57,7 @@ Download the package for your platform from the repository's [Releases](https://
 - **Boss fights:** The boss has 4000 HP and fires 4 projectiles in a spread aimed around the player's current position every 1.5 seconds. Each hit deals 50 damage.
 - **Wave scaling:** Scaling is deterministic. Every two waves, the regular enemy defeat target increases by 2 (maximum 24), enemy speeds increase by 5% (maximum 40% above base), and regular/special spawn intervals decrease by 0.05/0.1 seconds (floors of 0.5/1.5 seconds). Every four waves, the special enemy defeat target increases by 1 (maximum 6), and regular/special HP increase by 25/50 (maximum 200/400 HP). Counts cap at wave 13, HP and speed at wave 17, and spawn intervals at wave 21; values stay the same from then on.
 - **Score:** Destroying a regular enemy awards 5 points, a special enemy 10, and a boss 100. There is no win condition; survive as long as possible and have fun shooting the bad guy ships.
-- **States:** Start, Playing, Game Over, and Credits. Press `C` or gamepad `Y` on the start screen to open Credits.
+- **States:** Start, Playing, Game Over, Credits, and Keybinds
 
 ### Enemies
 
@@ -70,10 +70,11 @@ Download the package for your platform from the repository's [Releases](https://
 ### UI
 
 - **HUD:** HP bar, score, wave counter, and next-wave warning with a countdown during the pause. The warning appears below the wave-cleared message.
-- **Pause and quit:** Press `Escape` (keyboard) or tap `Start / Menu` (gamepad) to pause or resume gameplay. Hold either for 1.5 seconds to quit; a message appears at the top right while held. The wave countdown also pauses.
-- **Start screen:** Title, start prompt, and a credits prompt. `Enter` or gamepad `Start / Menu` starts the game; `C` or gamepad `Y` opens Credits.
-- **Credits screen:** Developer and asset credits. Return with `C`, `Y`, `Enter`, or `Start / Menu`.
-- **Game Over screen:** Final score and restart prompt
+- **Pause and quit:** Press `Escape` on a keyboard or tap `Start / Menu` on a gamepad to pause or resume gameplay. Hold either for 1.5 seconds to quit; a message appears at the top right while held. The wave countdown also pauses.
+- **Start screen:** Shows the start controls and how to open the Keybinds screen.
+- **Keybinds screen:** Lists all controls for keyboard and gamepad. Return to the previous screen with `Escape`, `K`, or `Enter` on a keyboard, or `B`, `X`, or `Start / Menu` on a gamepad.
+- **Credits screen:** Developer and asset credits. Return to the previous screen with `C` or `Enter` on a keyboard, or `Y` or `Start / Menu` on a gamepad.
+- **Game Over screen:** Final score and prompts to restart, open Credits, or view Keybinds.
 
 ---
 

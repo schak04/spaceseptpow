@@ -8,6 +8,7 @@
 #include "constants.hpp"
 #include "credits.hpp"
 #include "enemy.hpp"
+#include "keybinds.hpp"
 #include "player-enemy-collision.hpp"
 #include "player.hpp"
 #include "projectile-enemy-collision.hpp"
@@ -15,7 +16,7 @@
 
 Texture2D background;
 
-enum class GameState { Start, Playing, GameOver, Credits };
+enum class GameState { Start, Playing, GameOver, Credits, Keybinds };
 enum class MusicTrack { None, Theme, RegularWave, BossFight, WaveCleared, GameOver };
 
 void drawCenteredText(const char* text, int y, int fontSize, Color color) {
@@ -53,6 +54,7 @@ int main() {
 
     // background
     background = LoadTexture(getAssetPath("background/space-parallax.png").c_str());
+    RenderTexture2D gameScreen = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // change the starting state of the random number generator used by GetRandomValue()
     // so it's truly random
@@ -68,6 +70,7 @@ int main() {
     bossEnemyTexture = LoadTexture(getAssetPath("enemies/boss/boss-enemy-spaceship.png").c_str());
 
     GameState gameState = GameState::Start;
+    GameState menuReturnState = GameState::Start;
     int currentWave = 0;
     bool waveIntermission = false;
     float waveIntermissionTimer = 0.0f;
@@ -89,18 +92,16 @@ int main() {
             gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT);
         const bool gamepadStartDown =
             gamepadAvailable && IsGamepadButtonDown(0, GAMEPAD_BUTTON_MIDDLE_RIGHT);
+        const bool gamepadFullscreenPressed =
+            gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_LEFT);
         const bool gamepadCreditsPressed =
             gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_UP);
+        const bool gamepadKeybindsPressed =
+            gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_LEFT);
+        const bool gamepadBackPressed =
+            gamepadAvailable && IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT);
 
-        // background drawing
-        Rectangle backgroundSrcRect = {0.0f, 0.0f, (float)background.width,
-                                       (float)background.height};
-        Rectangle backgroundDestRect = {0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT};
-        Vector2 backgroundOrigin = {0.0f, 0.0f};
-
-        if (gameState == GameState::Playing)
-            DrawTexturePro(background, backgroundSrcRect, backgroundDestRect, backgroundOrigin,
-                           0.0f, WHITE);
+        if (IsKeyPressed(KEY_F) || gamepadFullscreenPressed) ToggleBorderlessWindowed();
 
         if (gameState == GameState::Playing && (IsKeyPressed(KEY_ESCAPE) || gamepadStartPressed)) {
             paused = !paused;
@@ -119,11 +120,20 @@ int main() {
             startWave(currentWave);
         } else if (gameState == GameState::Start &&
                    (IsKeyPressed(KEY_C) || gamepadCreditsPressed)) {
+            menuReturnState = GameState::Start;
             gameState = GameState::Credits;
+        } else if (gameState == GameState::Start &&
+                   (IsKeyPressed(KEY_K) || gamepadKeybindsPressed)) {
+            menuReturnState = GameState::Start;
+            gameState = GameState::Keybinds;
         } else if (gameState == GameState::Credits &&
                    (IsKeyPressed(KEY_C) || IsKeyPressed(KEY_ENTER) || gamepadStartPressed ||
                     gamepadCreditsPressed)) {
-            gameState = GameState::Start;
+            gameState = menuReturnState;
+        } else if (gameState == GameState::Keybinds &&
+                   (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_K) || IsKeyPressed(KEY_ENTER) ||
+                    gamepadBackPressed || gamepadKeybindsPressed || gamepadStartPressed)) {
+            gameState = menuReturnState;
         } else if (gameState == GameState::GameOver &&
                    (IsKeyPressed(KEY_ENTER) || gamepadStartPressed)) {
             Texture2D playerTexture = player.texture;
@@ -135,6 +145,14 @@ int main() {
             waveIntermission = false;
             startWave(currentWave);
             gameState = GameState::Playing;
+        } else if (gameState == GameState::GameOver &&
+                   (IsKeyPressed(KEY_C) || gamepadCreditsPressed)) {
+            menuReturnState = GameState::GameOver;
+            gameState = GameState::Credits;
+        } else if (gameState == GameState::GameOver &&
+                   (IsKeyPressed(KEY_K) || gamepadKeybindsPressed)) {
+            menuReturnState = GameState::GameOver;
+            gameState = GameState::Keybinds;
         }
 
         if (gameState == GameState::Playing && !gameOverPending && !paused &&
@@ -223,8 +241,17 @@ int main() {
         }
 
         BeginDrawing();
+        BeginTextureMode(gameScreen);
 
         ClearBackground(BLACK);
+
+        if (gameState == GameState::Playing) {
+            Rectangle backgroundSrcRect = {0.0f, 0.0f, (float)background.width,
+                                           (float)background.height};
+            Rectangle backgroundDestRect = {0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT};
+            DrawTexturePro(background, backgroundSrcRect, backgroundDestRect, {0.0f, 0.0f}, 0.0f,
+                           WHITE);
+        }
 
         if (gameState == GameState::Playing) {
             drawProjectiles();
@@ -259,25 +286,52 @@ int main() {
             }
         } else if (gameState == GameState::Start) {
             drawCenteredText(GAME_NAME, SCREEN_HEIGHT / 2 - 60, 48, SKYBLUE);
-            drawCenteredText("Press ENTER or START to start", SCREEN_HEIGHT / 2 + 10, 24, GOLD);
-            drawCenteredText("Press C or Y for credits", SCREEN_HEIGHT / 2 + 50, 20, LIGHTGRAY);
+            drawCenteredText("Start: ENTER on keyboard or START on gamepad", SCREEN_HEIGHT / 2 + 20,
+                             20, GOLD);
+            drawCenteredText("Credits: C on keyboard or Y on gamepad", SCREEN_HEIGHT / 2 + 48, 20,
+                             GREEN);
+            drawCenteredText("View all keybinds: K on keyboard or X on gamepad",
+                             SCREEN_HEIGHT / 2 + 76, 20, ORANGE);
         } else if (gameState == GameState::Credits) {
             drawCreditsScreen();
+        } else if (gameState == GameState::Keybinds) {
+            drawKeybindsScreen();
         } else {
-            drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, ORANGE);
+            drawCenteredText("Game Over", SCREEN_HEIGHT / 2 - 60, 48, RED);
             drawCenteredText(TextFormat("Score: %u", player.score), SCREEN_HEIGHT / 2, 24,
                              LIGHTGRAY);
-            drawCenteredText("Press ENTER or START to restart", SCREEN_HEIGHT / 2 + 40, 24, GOLD);
+            drawCenteredText("Restart with ENTER on keyboard or START on gamepad",
+                             SCREEN_HEIGHT / 2 + 40, 20, GOLD);
+            drawCenteredText("Credits: C on keyboard or Y on gamepad", SCREEN_HEIGHT / 2 + 75, 18,
+                             GREEN);
+            drawCenteredText("Keybinds: K on keyboard or X on gamepad", SCREEN_HEIGHT / 2 + 105, 18,
+                             SKYBLUE);
         }
 
         if (quitHoldTimer > 0.0f) {
-            const char* message = "Hold ESC or START to quit";
+            const char* message = "Quitting...";
             DrawText(message, SCREEN_WIDTH - MeasureText(message, 20) - 20, 20, 20, LIGHTGRAY);
         }
 
+        EndTextureMode();
+
+        ClearBackground(BLACK);
+        const float scale =
+            fminf((float)GetScreenWidth() / SCREEN_WIDTH, (float)GetScreenHeight() / SCREEN_HEIGHT);
+        Rectangle gameScreenDest = {
+            (GetScreenWidth() - SCREEN_WIDTH * scale) / 2.0f,
+            (GetScreenHeight() - SCREEN_HEIGHT * scale) / 2.0f,
+            SCREEN_WIDTH * scale,
+            SCREEN_HEIGHT * scale,
+        };
+        Rectangle gameScreenSrc = {0.0f, 0.0f, (float)gameScreen.texture.width,
+                                   -(float)gameScreen.texture.height};
+        DrawTexturePro(gameScreen.texture, gameScreenSrc, gameScreenDest, {0.0f, 0.0f}, 0.0f,
+                       WHITE);
         EndDrawing();
     }
 
+    UnloadRenderTexture(gameScreen);
     UnloadTexture(player.texture);
     UnloadTexture(regularEnemyTexture);
     UnloadTexture(specialEnemyTexture);
